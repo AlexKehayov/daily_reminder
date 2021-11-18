@@ -1,0 +1,1 @@
+create schema daily_reminder;
