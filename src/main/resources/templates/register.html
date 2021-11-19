@@ -1,0 +1,72 @@
+<html lang="en">
+<head th:replace="~{fragments/head :: head_declaration}"></head>
+<body>
+
+<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" uk-height-viewport>
+    <form class="form-signin" th:object="${user}" method="POST" enctype="utf8" action="/dailyReminder/register">
+    <div class="uk-width-1-1">
+        <div class="uk-container">
+            <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
+                <div class="uk-width-1-1@m">
+                    <div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
+                        <h3 class="uk-card-title uk-text-center">Registration form</h3>
+                        <form>
+                            <div class="uk-margin">
+                                <div class="uk-inline uk-width-1-1">
+                                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                                    <input th:field="*{firstName}" class="uk-input uk-form-large form-control" type="text">
+                                    <p th:each="error: ${#fields.errors('firstName')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-inline uk-width-1-1">
+                                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                                    <input th:field="*{lastName}" class="uk-input uk-form-large form-control" type="text">
+                                    <p th:each="error : ${#fields.errors('lastName')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-inline uk-width-1-1">
+                                    <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                                    <input th:field="*{email}" class="uk-input uk-form-large form-control" type="email">
+                                    <p th:each="error : ${#fields.errors('email')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-inline uk-width-1-1">
+                                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                                    <input th:field="*{username}" class="uk-input uk-form-large form-control" type="text">
+                                    <p th:each="error: ${#fields.errors('username')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-inline uk-width-1-1">
+                                    <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                                    <input th:field="*{password}" class="uk-input uk-form-large form-control" type="password">
+                                    <p th:each="error : ${#fields.errors('password')}"
+                                       th:text="${error}">Validation error</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-inline uk-width-1-1">
+                                    <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                                    <input th:field="*{matchingPassword}" class="uk-input uk-form-large form-control" type="password">
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <button type="submit" class="uk-button uk-button-primary uk-button-large uk-width-1-1">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+</body>
+</html>

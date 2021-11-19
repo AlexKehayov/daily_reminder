@@ -1,23 +1,31 @@
-package com.alex.daily_reminder.daily_reminder.security.auth;
+package com.alex.daily_reminder.daily_reminder.security.model;
 
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
 
+@Setter
+@NoArgsConstructor
 public class ApplicationUser implements UserDetails {
 
-    private final Set<? extends GrantedAuthority> grantedAuthorities;
-    private final String password;
-    private final String username;
-    private final String email;
-    private final boolean isAccountNonExpired;
-    private final boolean isAccountNonLocked;
-    private final boolean isCredentialsNonExpired;
-    private final boolean isEnabled;
+    private Set<? extends GrantedAuthority> grantedAuthorities;
+    private String password;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private boolean isAccountNonExpired;
+    private boolean isAccountNonLocked;
+    private boolean isCredentialsNonExpired;
+    private boolean isEnabled;
 
     public ApplicationUser(String username,
+                           String firstName,
+                           String lastName,
                            String password,
                            String email,
                            Set<? extends GrantedAuthority> grantedAuthorities,
@@ -29,6 +37,8 @@ public class ApplicationUser implements UserDetails {
         this.grantedAuthorities = grantedAuthorities;
         this.password = password;
         this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.isAccountNonExpired = isAccountNonExpired;
         this.isAccountNonLocked = isAccountNonLocked;
@@ -55,6 +65,14 @@ public class ApplicationUser implements UserDetails {
         return email;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return isAccountNonExpired;
@@ -74,4 +92,6 @@ public class ApplicationUser implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
+
+
 }
