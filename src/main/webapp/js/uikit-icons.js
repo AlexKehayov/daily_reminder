@@ -1,5 +1,3 @@
-/*! UIkit 3.9.1 | https://www.getuikit.com | (c) 2014 - 2021 YOOtheme | MIT License */
-
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define('uikiticons', factory) :
