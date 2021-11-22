@@ -14,48 +14,62 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                    <input th:field="*{firstName}" class="uk-input uk-form-large form-control" type="text">
-                                    <p th:each="error: ${#fields.errors('firstName')}"
-                                       th:text="${error}">Validation error</p>
+                                    <input th:field="*{firstName}" placeholder="First name" class="uk-input uk-form-large form-control" type="text">
                                 </div>
+                                <th:block th:each="error : ${errors}">
+                                    <p th:if="${error.pointer.equals('firstName')}" style="color: red"
+                                       th:text="${error.message}">Validation error</p>
+                                </th:block>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                    <input th:field="*{lastName}" class="uk-input uk-form-large form-control" type="text">
-                                    <p th:each="error : ${#fields.errors('lastName')}"
-                                       th:text="${error}">Validation error</p>
+                                    <input th:field="*{lastName}" placeholder="Last name" class="uk-input uk-form-large form-control" type="text">
                                 </div>
+                                <th:block th:each="error : ${errors}">
+                                    <p th:if="${error.pointer.equals('lastName')}" style="color: red"
+                                       th:text="${error.message}">Validation error</p>
+                                </th:block>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                                    <input th:field="*{email}" class="uk-input uk-form-large form-control" type="email">
-                                    <p th:each="error : ${#fields.errors('email')}"
-                                       th:text="${error}">Validation error</p>
+                                    <input th:field="*{email}" placeholder="Email" class="uk-input uk-form-large form-control" type="email">
                                 </div>
+                                <th:block th:each="error : ${errors}">
+                                    <p th:if="${error.pointer.equals('email')}" style="color: red"
+                                       th:text="${error.message}">Validation error</p>
+                                </th:block>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                    <input th:field="*{username}" class="uk-input uk-form-large form-control" type="text">
-                                    <p th:each="error: ${#fields.errors('username')}"
-                                       th:text="${error}">Validation error</p>
+                                    <input th:field="*{username}" placeholder="Username" class="uk-input uk-form-large form-control" type="text">
                                 </div>
+                                <th:block th:each="error : ${errors}">
+                                    <p th:if="${error.pointer.equals('username')}" style="color: red"
+                                       th:text="${error.message}">Validation error</p>
+                                </th:block>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                    <input th:field="*{password}" class="uk-input uk-form-large form-control" type="password">
-                                    <p th:each="error : ${#fields.errors('password')}"
-                                       th:text="${error}">Validation error</p>
+                                    <input th:field="*{password}" placeholder="Password" class="uk-input uk-form-large form-control" type="password">
                                 </div>
+                                <th:block th:each="error : ${errors}">
+                                    <p th:if="${error.pointer.equals('password')}" style="color: red"
+                                       th:text="${error.message}">Validation error</p>
+                                </th:block>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                    <input th:field="*{matchingPassword}" class="uk-input uk-form-large form-control" type="password">
+                                    <input th:field="*{matchingPassword}" placeholder="Repeat password" class="uk-input uk-form-large form-control" type="password">
                                 </div>
+                                <th:block th:each="error : ${errors}">
+                                    <p th:if="${error.pointer.equals('matchingPassword')}" style="color: red"
+                                       th:text="${error.message}">Validation error</p>
+                                </th:block>
                             </div>
                             <div class="uk-margin">
                                 <button type="submit" class="uk-button uk-button-primary uk-button-large uk-width-1-1">Register</button>
