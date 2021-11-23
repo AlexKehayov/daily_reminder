@@ -53,4 +53,9 @@ public class RealApplicationUserDaoService implements ApplicationUserDao {
     public void saveUser(UserDTO userDTO) throws Exception {
         userRepository.save(userMapper.dtoToEntity(userDTO));
     }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByUsername(username).get(0);
+    }
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<nav th:fragment="nav" class="uk-navbar-container" uk-navbar style="margin-bottom: 20%">
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li><span th:text="${'  Welcome to Daily Reminder, ' + loggedUser.getFirstName() + ' ' + loggedUser.getLastName()}"></span></li>
+        </ul>
+    </div>
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            <li>
+                <a href="#">Options</a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li><a href="#">Some options here</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li><a href="/dailyReminder/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+</html>

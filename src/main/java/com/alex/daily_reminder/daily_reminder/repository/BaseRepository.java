@@ -1,4 +1,4 @@
-package com.alex.daily_reminder.daily_reminder.security.repository;
+package com.alex.daily_reminder.daily_reminder.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

@@ -1,6 +1,7 @@
 package com.alex.daily_reminder.daily_reminder.security.service;
 
 import com.alex.daily_reminder.daily_reminder.security.model.UserDTO;
+import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,5 +26,9 @@ public class ApplicationUserService implements UserDetailsService {
 
     public void registerUser(UserDTO userDTO) throws Exception {
         applicationUserDao.saveUser(userDTO);
+    }
+
+    public UserEntity findUserByUsername(String username) {
+        return applicationUserDao.findByUsername(username);
     }
 }

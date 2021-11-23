@@ -3,6 +3,7 @@ package com.alex.daily_reminder.daily_reminder.security.service;
 import com.alex.daily_reminder.daily_reminder.security.mapper.UserMapper;
 import com.alex.daily_reminder.daily_reminder.security.model.ApplicationUser;
 import com.alex.daily_reminder.daily_reminder.security.model.UserDTO;
+import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.security.repository.UserRepository;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,10 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
     @Override
     public void saveUser(UserDTO userDTO) throws Exception {
         userRepository.save(userMapper.dtoToEntity(userDTO));
+    }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByUsername(username).get(0);
     }
 }

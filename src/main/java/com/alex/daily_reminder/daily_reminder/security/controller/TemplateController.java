@@ -1,14 +1,19 @@
 package com.alex.daily_reminder.daily_reminder.security.controller;
 
 import com.alex.daily_reminder.daily_reminder.security.model.UserDTO;
+import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.security.service.ApplicationUserService;
 import com.alex.daily_reminder.daily_reminder.security.validator.RegistrationValidator;
+import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.alex.daily_reminder.daily_reminder.validation.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,6 +34,7 @@ import java.util.List;
 public class TemplateController {
 
     private final ApplicationUserService applicationUserService;
+    private final SecurityUtil securityUtil;
     private final RegistrationValidator registrationValidator;
 
     @GetMapping
@@ -42,7 +49,13 @@ public class TemplateController {
 
     @GetMapping(value = { "/home"})
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public String getHomeView(){
+    public String getHomeView(Model model){
+
+        UserEntity loggedUser = securityUtil.getLoggedUser();
+        if (Objects.nonNull(loggedUser)){
+            model.addAttribute("loggedUser", loggedUser);
+        }
+
         return "home";
     }
 
