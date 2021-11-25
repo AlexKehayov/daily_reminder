@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<nav th:fragment="nav" class="uk-navbar-container" uk-navbar style="margin-bottom: 20%">
+<nav th:fragment="nav" class="uk-navbar-container" uk-navbar style="margin-top: -70px">
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
             <li><span th:text="${'  Welcome to Daily Reminder, ' + loggedUser.getFirstName() + ' ' + loggedUser.getLastName()}"></span></li>
@@ -12,7 +12,9 @@
                 <a href="#">Options</a>
                 <div class="uk-navbar-dropdown">
                     <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a href="#">Some options here</a></li>
+                        <li><a href="/dailyReminder/home">Home</a></li>
+                        <li><a href="/dailyReminder/diary">Diary</a></li>
+                        <li><a href="/dailyReminder/organizer">Organizer</a></li>
                     </ul>
                 </div>
             </li>

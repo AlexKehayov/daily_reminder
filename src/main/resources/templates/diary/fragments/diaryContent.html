@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:fragment="diaryContent(content, errors, message)">
+
+    <div th:if="${message != null}" class="uk-alert-danger" uk-alert>
+        <p th:text="${message}"></p>
+    </div>
+
+    <div class="uk-margin">
+        <textarea class="uk-textarea uk-form-large" id="diary-content" th:value="${content}"></textarea>
+    </div>
+    <th:block th:each="error : ${errors}">
+        <p th:if="${error.pointer.equals('content')}" style="color: red"
+           th:text="${error.message}">Validation error</p>
+    </th:block>
+    <button id="save-diary-entry" class="uk-button uk-button-primary">Save</button>
+</div>
+</html>

@@ -2,8 +2,24 @@
 <html lang="en">
 <head th:replace="~{fragments/head :: head_declaration}"></head>
 <body>
-<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/pen.jpg); background-size:cover" uk-height-viewport>
+<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade"
+     style="background-image: url(images/pen.jpg); background-size:cover" uk-height-viewport>
     <nav th:replace="~{fragments/navbar :: nav}"></nav>
+
+    <div uk-alert>
+        <ul uk-accordion>
+            <li>
+                <a class="uk-accordion-title" href="#">Search entries</a>
+                <div class="uk-accordion-content"></div>
+            </li>
+            <li id="create-diary-entry-li">
+                <a class="uk-accordion-title" href="#">Create new entry</a>
+                <div class="uk-accordion-content" id="diary-content-container">
+                    <div th:replace="~{diary/fragments/diaryContent :: diaryContent(content = null, errors = null, message = null)}"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
 
 </div>
 </body>
