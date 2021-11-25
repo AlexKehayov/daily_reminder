@@ -10,7 +10,9 @@
         <ul uk-accordion>
             <li>
                 <a class="uk-accordion-title" href="#">Search entries</a>
-                <div class="uk-accordion-content"></div>
+                <div class="uk-accordion-content">
+                    <div th:replace="~{diary/fragments/diaryTable :: data(diaryRecords = ${diaryRecords}, filter = ${filter}, total = ${total})}"></div>
+                </div>
             </li>
             <li id="create-diary-entry-li">
                 <a class="uk-accordion-title" href="#">Create new entry</a>

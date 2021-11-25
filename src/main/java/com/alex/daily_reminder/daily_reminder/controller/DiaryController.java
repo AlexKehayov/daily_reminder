@@ -1,7 +1,7 @@
 package com.alex.daily_reminder.daily_reminder.controller;
 
+import com.alex.daily_reminder.daily_reminder.filter.DiaryRecordFilter;
 import com.alex.daily_reminder.daily_reminder.model.DiaryRecordEntity;
-import com.alex.daily_reminder.daily_reminder.security.model.UserDTO;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.service.DiaryRecordService;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
@@ -12,14 +12,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 @RequestMapping("/diary")
 public class DiaryController {
 
@@ -28,13 +32,15 @@ public class DiaryController {
     private final DiaryRecordService diaryRecordService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String getDiaryHome(Model model) {
 
         UserEntity loggedUser = securityUtil.getLoggedUser();
         if (Objects.nonNull(loggedUser)) {
             model.addAttribute("loggedUser", loggedUser);
         }
+
+        DiaryRecordFilter diaryRecordFilter = new DiaryRecordFilter();
+        fillData(model, diaryRecordFilter);
         return "diary/diary";
     }
 
@@ -53,7 +59,7 @@ public class DiaryController {
         diaryRecordEntity.setUserUsername(securityUtil.getLoggedUser().getUsername());
 
         List<ValidationError> errors = diaryEntryValidator.validate(diaryRecordEntity);
-        if(!CollectionUtils.isEmpty(errors)){
+        if (!CollectionUtils.isEmpty(errors)) {
             model.addAttribute("errors", errors);
             model.addAttribute("content", content);
         } else {
@@ -65,6 +71,40 @@ public class DiaryController {
         }
 
         return "diary/fragments/diaryContent :: diaryContent";
+    }
+
+    @PostMapping("/searchDiary")
+    public String searchDiary(
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) String dateFrom,
+            @RequestParam(required = false) String dateTo,
+            @RequestParam(required = false) Integer currentPage,
+            Model model) throws ParseException {
+
+        DiaryRecordFilter diaryRecordFilter = new DiaryRecordFilter();
+
+        if (StringUtils.hasText(content))
+            diaryRecordFilter.setContent(content);
+
+        if (StringUtils.hasText(dateFrom))
+            diaryRecordFilter.setCreateDateFrom(new SimpleDateFormat("dd.MM.yy").parse(dateFrom));
+
+        if (StringUtils.hasText(dateTo))
+            diaryRecordFilter.setCreateDateTo(new SimpleDateFormat("dd.MM.yy").parse(dateTo));
+
+        if (Objects.nonNull(currentPage))
+            diaryRecordFilter.setPage(currentPage);
+
+        fillData(model, diaryRecordFilter);
+
+        return "diary/fragments/diaryTableContent :: table";
+    }
+
+    private void fillData(Model model, DiaryRecordFilter filter) {
+        List<DiaryRecordEntity> diaryRecords = diaryRecordService.selectDiaryRecords(filter);
+        model.addAttribute("filter", filter);
+        model.addAttribute("diaryRecords", diaryRecords);
+        model.addAttribute("total", diaryRecordService.selectDiaryRecordsCount(filter));
     }
 
 }

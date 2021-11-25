@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:remove="tag" th:fragment="table(diaryRecords, filter, total)">
+
+    <div th:if="${!#lists.isEmpty(diaryRecords)}" style="margin-top: 1%">
+        <div>
+            <div>
+                <span>Total: </span>
+                <span th:text="${total}"></span>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <div>
+                <table class="uk-table uk-table-striped uk-table-small">
+                    <thead>
+                    <tr>
+                        <th style="width: 20%">Date</th>
+                        <th>Content</th>
+                        <th style="width: 10%">Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item,itemStat : ${diaryRecords}">
+                        <td th:text="${#dates.format(item.createdDate,'dd.MM.yyyy HH:mm:ss')}"></td>
+                        <td th:text="${#strings.abbreviate(item.content, 100)}"></td>
+                        <td class="options text-center">
+                            <a th:href="${'#modal-view-' + item.id}" uk-toggle>
+                                <span uk-icon="icon: info"></span>
+                            </a>
+                            <a class="location-diary-entry" th:data-id="${item.id}">
+                                <span uk-icon="icon: world"></span>
+                            </a>
+                        </td>
+                        <div th:id="${'modal-view-' + item.id}" uk-modal>
+                            <div class="uk-modal-dialog uk-modal-body" style="width: 80%; height: auto">
+                                <h2 class="uk-modal-title"><span th:text="${item.createdDate}"></span></h2>
+                                <p th:text="${item.content}"></p>
+                            </div>
+                        </div>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="paginator">
+                    <input type="hidden" id="currentPage" th:value="${filter.page}">
+                    <ul class="uk-pagination uk-flex-center" uk-margin>
+                        <li th:if="${filter.page > 1}" class="diary-prev-page"><a><span uk-pagination-previous></span></a></li>
+                        <li th:each="i: ${#numbers.sequence(1, (total%filter.pageSize == 0 ? (total/filter.pageSize) : (total/filter.pageSize + 1)))}" th:value="${i}" th:class="${filter.page == i ? 'diary-page uk-active':'diary-page'}"><a><span th:style="${filter.page == i ? 'color: red':''}" th:text="${i}"></span></a></li>
+                        <li th:if="${filter.page < (total%filter.pageSize == 0 ? (total/filter.pageSize) : (total/filter.pageSize + 1))}" class="diary-next-page"><a><span uk-pagination-next></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

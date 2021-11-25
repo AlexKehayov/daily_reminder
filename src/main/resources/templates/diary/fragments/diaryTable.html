@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:fragment="data(diaryRecords, filter, total)">
+    <div id="fw-diaryRecords">
+        <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-1-2@s">
+                <label class="uk-form-label" for="diary-filter-date-from">Content</label>
+                <input id="diary-filter-content" class="uk-input" type="text" th:value="${filter.content}">
+            </div>
+            <div class="uk-width-1-4@s">
+                <label class="uk-form-label" for="diary-filter-date-from">Date from</label>
+                <input class="uk-input" id="diary-filter-date-from" type="text"
+                       th:value="${#dates.format(filter.createDateFrom,'dd.MM.yyyy')}">
+            </div>
+            <div class="uk-width-1-4@s">
+                <label class="uk-form-label" for="diary-filter-date-to">Date to</label>
+                <input class="uk-input" id="diary-filter-date-to" type="text"
+                       th:value="${#dates.format(filter.createDateTo,'dd.MM.yyyy')}">
+            </div>
+        </div>
+
+        <div style="margin-top: 1%">
+            <button style="margin-right: 5px;min-width: 120px; float: right" id="diaryRecords-filter-clear"
+                    class="uk-button uk-button-grey">Clear
+            </button>
+            <button style="min-width: 120px" id="diaryRecords-filter-submit"
+                    class="uk-button uk-button-primary">Search
+            </button>
+        </div>
+
+    </div>
+    <div id="tw-diaryRecords">
+        <div th:replace="~{diary/fragments/diaryTableContent :: table(diaryRecords = ${diaryRecords}, filter = ${filter}, total = ${total})}"></div>
+    </div>
+</div>
+</html>
