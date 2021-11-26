@@ -26,10 +26,10 @@ public class DiaryRecordEntity implements Serializable {
     private Date createdDate;
 
     @Column(name = "geo_lat")
-    private Float geoLat;
+    private Double geoLat;
 
     @Column(name = "geo_lng")
-    private Float geoLng;
+    private Double geoLng;
 
     @Column(name = "geo_place")
     private String geoPlace;

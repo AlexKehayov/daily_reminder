@@ -13,7 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,8 +50,8 @@ public class DiaryController {
     @PostMapping("/saveEntry")
     public String saveDiaryEntry(
             @RequestParam String content,
-            @RequestParam(required = false) Float lat,
-            @RequestParam(required = false) Float lng,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lng,
             Model model) {
 
         DiaryRecordEntity diaryRecordEntity = new DiaryRecordEntity();
@@ -98,6 +101,28 @@ public class DiaryController {
         fillData(model, diaryRecordFilter);
 
         return "diary/fragments/diaryTableContent :: table";
+    }
+
+    @PostMapping("/initContentModal")
+    public String initContentModal(
+            @RequestParam String content,
+            @RequestParam String createdDate,
+            Model model) throws ParseException {
+        model.addAttribute("content", content);
+        model.addAttribute("createdDate", new SimpleDateFormat("yy-MM-dd HH:mm:ss.S").parse(createdDate));
+        return "diary/modals/viewContent :: view-content";
+    }
+
+    @PostMapping("/initGeoLocationModal")
+    public String initGeoLocationModal(
+            @RequestParam Double lat,
+            @RequestParam Double lng,
+            @RequestParam String createdDate,
+            Model model) throws ParseException {
+        model.addAttribute("geoLat", lat);
+        model.addAttribute("geoLng", lng);
+        model.addAttribute("createdDate", new SimpleDateFormat("yy-MM-dd HH:mm:ss.S").parse(createdDate));
+        return "diary/modals/viewGeoLocation :: view-geo-location";
     }
 
     private void fillData(Model model, DiaryRecordFilter filter) {

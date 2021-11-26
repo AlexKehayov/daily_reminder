@@ -10,3 +10,6 @@ create table diary_record
     constraint diary_record_pk
         primary key (id)
 );
+
+alter table diary_record modify geo_lat double null;
+alter table diary_record modify geo_lng double null;

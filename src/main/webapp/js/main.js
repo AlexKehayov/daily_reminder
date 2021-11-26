@@ -60,6 +60,7 @@ function saveDiaryEntry(lat, lng){
             var accordionEl = util.$('ul[uk-accordion]');
             UIkit.accordion(accordionEl).toggle();
             $('#diary-content-container').html(result);
+            searchDiary(null, null, null, "1");
         },
         error: function () {
             alert("An unexpected error occurred... Please try again.")
@@ -121,5 +122,61 @@ function searchDiary(content, dateFrom, dateTo, currentPage){
         error: function () {
             alert("An unexpected error occurred... Please try again.")
         }
+    });
+}
+
+$(document).on("click", ".diary-view-content", function (e) {
+    let content = $(this).attr('data-content');
+    let createdDate = $(this).attr('data-createdDate');
+
+    $.ajax({
+        url: '/dailyReminder/diary/initContentModal',
+        type: "post",
+        data: {
+            content: content,
+            createdDate: createdDate
+        },
+        success: function (result) {
+            $('#modal-view').html(result);
+            $('#modal-view').addClass('uk-open').show();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("click", ".diary-view-geo-location", function (e) {
+    let lat = $(this).attr('data-lat');
+    let lng = $(this).attr('data-lng');
+    let createdDate = $(this).attr('data-createdDate');
+
+    $.ajax({
+        url: '/dailyReminder/diary/initGeoLocationModal',
+        type: "post",
+        data: {
+            lat: lat,
+            lng: lng,
+            createdDate: createdDate
+        },
+        success: function (result) {
+            $('#modal-location').html(result);
+            $('#modal-location').addClass('uk-open').show();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+function initMap() {
+    const uluru = {lat: 25.0, lng: 42.0};
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 4,
+        center: uluru,
+    });
+    const marker = new google.maps.Marker({
+        position: uluru,
+        map: map,
     });
 }
