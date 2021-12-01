@@ -68,6 +68,25 @@ function saveDiaryEntry(lat, lng){
     });
 }
 
+$(document).on("click", ".delete-diary-entry", function (e) {
+
+    let id = $(this).attr('data-id');
+
+    $.ajax({
+        url: '/dailyReminder/diary/deleteEntry',
+        type: "post",
+        data: {
+            id: id
+        },
+        success: function () {
+            searchDiary(null, null, null, "1");
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
 $(document).on("click", "#diaryRecords-filter-clear", function (e) {
     $('#diary-filter-content').val('');
     $('#diary-filter-date-from').val('');

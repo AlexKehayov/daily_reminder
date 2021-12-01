@@ -9,6 +9,8 @@ public interface DiaryRecordService {
 
     void saveDiaryEntry(DiaryRecordEntity diaryRecord);
 
+    void deleteDiaryEntry(Integer id);
+
     List<DiaryRecordEntity> selectDiaryRecords(DiaryRecordFilter filter);
 
     int selectDiaryRecordsCount(DiaryRecordFilter filter);

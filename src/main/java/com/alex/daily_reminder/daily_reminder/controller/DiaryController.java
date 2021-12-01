@@ -13,10 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,6 +71,13 @@ public class DiaryController {
         }
 
         return "diary/fragments/diaryContent :: diaryContent";
+    }
+
+    @PostMapping("/deleteEntry")
+    @ResponseBody
+    public void deleteDiaryEntry(
+            @RequestParam Integer id) {
+       diaryRecordService.deleteDiaryEntry(id);
     }
 
     @PostMapping("/searchDiary")

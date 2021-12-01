@@ -25,6 +25,11 @@ public class DiaryRecordServiceImpl implements DiaryRecordService {
     }
 
     @Override
+    public void deleteDiaryEntry(Integer id) {
+        diaryRecordRepository.deleteById(id);
+    }
+
+    @Override
     public List<DiaryRecordEntity> selectDiaryRecords(DiaryRecordFilter filter) {
         List<DiaryRecordEntity> result = diaryRecordRepositoryCustom.selectConfigParams(filter);
         return result;
