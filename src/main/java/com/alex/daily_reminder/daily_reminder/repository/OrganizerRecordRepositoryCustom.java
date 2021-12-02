@@ -3,6 +3,7 @@ package com.alex.daily_reminder.daily_reminder.repository;
 import com.alex.daily_reminder.daily_reminder.filter.*;
 import com.alex.daily_reminder.daily_reminder.model.DiaryRecordEntity;
 import com.alex.daily_reminder.daily_reminder.model.OrganizerRecordEntity;
+import com.alex.daily_reminder.daily_reminder.model.PlaceEntity;
 import com.alex.daily_reminder.daily_reminder.util.DateUtil;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,10 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -94,6 +99,17 @@ public class OrganizerRecordRepositoryCustom {
         if (Objects.nonNull(toDate)) {
             query.setParameter("toDate", DateUtil.toTheEndOfTheDay(toDate));
         }
+    }
+
+    public List<OrganizerRecordEntity> selectOrganizerrecordsForTomorrow() {
+        Query query = em.createNativeQuery("select * from organizer_record x where date(x.fixed_date) = :tomorrow OR (x.from_date <= :tomorrow AND x.to_date >= :tomorrow)", OrganizerRecordEntity.class);
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, 1);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = dateFormat.format(c.getTime());
+        query.setParameter("tomorrow", strDate);
+        return query.getResultList();
     }
 
 }

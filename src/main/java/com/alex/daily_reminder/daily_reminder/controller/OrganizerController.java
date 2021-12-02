@@ -4,13 +4,15 @@ import com.alex.daily_reminder.daily_reminder.filter.OrganizerRecordFilter;
 import com.alex.daily_reminder.daily_reminder.model.OrganizerRecordEntity;
 import com.alex.daily_reminder.daily_reminder.model.PlaceEntity;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
+import com.alex.daily_reminder.daily_reminder.security.service.ApplicationUserService;
 import com.alex.daily_reminder.daily_reminder.service.OrganizerRecordService;
 import com.alex.daily_reminder.daily_reminder.service.PlacesService;
-import com.alex.daily_reminder.daily_reminder.util.JsonUtil;
+import com.alex.daily_reminder.daily_reminder.util.EmailUtil;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.alex.daily_reminder.daily_reminder.validation.OrganizerEntryValidator;
 import com.alex.daily_reminder.daily_reminder.validation.ValidationError;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -31,9 +32,11 @@ import java.util.Objects;
 public class OrganizerController {
 
     private final SecurityUtil securityUtil;
+    private final EmailUtil emailUtil;
     private final OrganizerEntryValidator organizerEntryValidator;
     private final OrganizerRecordService organizerRecordService;
     private final PlacesService placesService;
+    private final ApplicationUserService userService;
 
     @GetMapping
     public String getOrganizerHome(Model model) {
@@ -85,9 +88,9 @@ public class OrganizerController {
             organizerRecordEntity.setFromTime(LocalTime.parse(fromTime));
         if (StringUtils.hasText(toTime))
             organizerRecordEntity.setToTime(LocalTime.parse(toTime));
-        if(Objects.nonNull(geoLat))
+        if (Objects.nonNull(geoLat))
             organizerRecordEntity.setGeoLat(geoLat);
-        if(Objects.nonNull(geoLng))
+        if (Objects.nonNull(geoLng))
             organizerRecordEntity.setGeoLng(geoLng);
         if (StringUtils.hasText(geoPlace))
             organizerRecordEntity.setGeoPlace(geoPlace);
@@ -175,6 +178,18 @@ public class OrganizerController {
         model.addAttribute("filter", filter);
         model.addAttribute("organizerRecords", organizerRecords);
         model.addAttribute("total", organizerRecordService.selectOrganizerRecordsCount(filter));
+    }
+
+    @Scheduled(cron = "0 0 12 * * *") //every day at 12:00 s/m/h/...      for every minute cron = "* */1 * * * *"
+    private void sendReminders() {
+        List<OrganizerRecordEntity> organizerRecordEntities = organizerRecordService.selectOrganizerRecordsForTomorrow();
+        String subject = "A quick reminder from Daily Reminder :)";
+        String text;
+        for(OrganizerRecordEntity ore : organizerRecordEntities){
+            text = "You have the following task for tomorrow:\nTitle: " + ore.getTitle() + "\n" + "Content: " + ore.getContent() + "\n" + "Time: " + (ore.getIsFixedTime() ? ore.getFixedTime() : (ore.getFromTime() + " - " + ore.getToTime())) + "\nPlace: " + ore.getGeoPlace();
+            UserEntity user = userService.findUserByUsername(ore.getUserUsername());
+            emailUtil.sendEmail(subject, text, user.getEmail());
+        }
     }
 
 }

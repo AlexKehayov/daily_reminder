@@ -17,4 +17,6 @@ public interface OrganizerRecordService {
 
     OrganizerRecordEntity selectOrganizerRecordById(Integer id);
 
+    List<OrganizerRecordEntity> selectOrganizerRecordsForTomorrow();
+
 }

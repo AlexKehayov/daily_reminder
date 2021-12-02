@@ -44,4 +44,9 @@ public class OrganizerRecordServiceImpl implements OrganizerRecordService {
     public OrganizerRecordEntity selectOrganizerRecordById(Integer id) {
         return organizerRecordRepository.getById(id);
     }
+
+    @Override
+    public List<OrganizerRecordEntity> selectOrganizerRecordsForTomorrow() {
+        return organizerRecordRepositoryCustom.selectOrganizerrecordsForTomorrow();
+    }
 }
