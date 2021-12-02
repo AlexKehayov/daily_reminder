@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:fragment="organizerContent(organizerEntry, errors, message)">
+
+    <div th:if="${message != null}" class="uk-alert-danger" uk-alert>
+        <p th:text="${message}"></p>
+    </div>
+
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-1@s">
+            <label class="uk-form-label" for="organizer-title">Title</label>
+            <input id="organizer-title" class="uk-input" type="text" th:value="${organizerEntry?.title}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('title')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-1@s">
+            <label class="uk-form-label" for="organizer-content">Content</label>
+            <textarea id="organizer-content" class="uk-textarea" th:value="${organizerEntry?.title}"></textarea>
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('content')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-4@s">
+            <label class="uk-form-label" for="organizer-from-date">From date</label>
+            <input th:disabled="${organizerEntry.isFixedDate}" class="uk-input" id="organizer-from-date" type="text"
+                   th:value="${#dates.format(organizerEntry?.fromDate,'dd.MM.yyyy')}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('fromDate')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+        <div class="uk-width-1-4@s">
+            <label class="uk-form-label" for="organizer-to-date">To date</label>
+            <input th:disabled="${organizerEntry.isFixedDate}" class="uk-input" id="organizer-to-date" type="text"
+                   th:value="${#dates.format(organizerEntry?.toDate,'dd.MM.yyyy')}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('toDate')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+        <div class="uk-width-1-4@s">
+            <label class="uk-switch" for="organizer-is-fixed-date" style="margin: 10% 0 0 40%">
+                <input type="checkbox" id="organizer-is-fixed-date" th:checked="${organizerEntry.isFixedDate}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+        <div class="uk-width-1-4@s">
+            <label class="uk-form-label" for="organizer-fixed-date">Fixed date</label>
+            <input th:disabled="${!organizerEntry.isFixedDate}" class="uk-input" id="organizer-fixed-date" type="text"
+                   th:value="${#dates.format(organizerEntry?.fixedDate,'dd.MM.yyyy')}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('fixedDate')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-4@s uk-autocomplete">
+            <label class="uk-form-label" for="organizer-from-time">From time</label>
+            <input th:disabled="${organizerEntry.isFixedTime}" class="uk-input" id="organizer-from-time" type="text" data-uk-timepicker
+                   th:value="${#temporals.format(organizerEntry?.fromTime,'HH:mm')}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('fromTime')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+        <div class="uk-width-1-4@s uk-autocomplete">
+            <label class="uk-form-label" for="organizer-to-time">To time</label>
+            <input th:disabled="${organizerEntry.isFixedTime}" class="uk-input" id="organizer-to-time" type="text" data-uk-timepicker
+                   th:value="${#temporals.format(organizerEntry?.toTime,'HH:mm')}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('toTime')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+        <div class="uk-width-1-4@s">
+            <label class="uk-switch" for="organizer-is-fixed-time" style="margin: 10% 0 0 40%">
+                <input type="checkbox" id="organizer-is-fixed-time" th:checked="${organizerEntry.isFixedTime}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+        <div class="uk-width-1-4@s">
+            <label class="uk-form-label" for="organizer-fixed-time">Fixed time</label>
+            <input th:disabled="${!organizerEntry.isFixedTime}" class="uk-input" id="organizer-fixed-time" type="text" data-uk-timepicker
+                   th:value="${#temporals.format(organizerEntry?.fixedTime,'HH:mm')}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('fixedTime')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="uk-grid-small" uk-grid style="margin-bottom: 1%">
+        <div class="uk-width-1-1@s">
+            <label class="uk-form-label" for="organizer-geo-place">Place</label>
+            <input class="uk-input" id="organizer-geo-place" type="text"
+                   th:value="${organizerEntry?.geoPlace}">
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('geoPlace')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+        </div>
+    </div>
+    <button id="save-organizer-entry" class="uk-button uk-button-primary">Save</button>
+    <input type="hidden" id="errors" th:value="${errors}">
+    <script>
+
+        $("#organizer-from-date").datepicker(
+            $.extend(
+                {},
+                {
+                    changeMonth: true,
+                    changeYear: true,
+                    showOtherMonths: true,
+                    selectOtherMonths: false,
+                    dateFormat: 'dd.mm.yy',
+                    firstDay: 1,
+                    onSelect: function (date) {
+                        $("#organizer-to-date").datepicker("option", "minDate", date);
+                    }
+                }
+            ));
+
+        $("#organizer-to-date").datepicker(
+            $.extend(
+                {},
+                {
+                    changeMonth: true,
+                    changeYear: true,
+                    showOtherMonths: true,
+                    selectOtherMonths: false,
+                    dateFormat: 'dd.mm.yy',
+                    firstDay: 1,
+                    onSelect: function (date) {
+                        $("#organizer-from-date").datepicker("option", "maxDate", date);
+                    }
+                }
+            ));
+
+        $("#organizer-fixed-date").datepicker(
+            $.extend(
+                {},
+                {
+                    changeMonth: true,
+                    changeYear: true,
+                    showOtherMonths: true,
+                    selectOtherMonths: false,
+                    dateFormat: 'dd.mm.yy',
+                    firstDay: 1
+                }
+            ));
+
+        $('#organizer-fixed-time').timepicker({
+            timeFormat: 'HH:mm',
+            interval: 30,
+            minTime: '00:00',
+            maxTime: '23:30',
+            startTime: '00:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+        $('#organizer-from-time').timepicker({
+            timeFormat: 'HH:mm',
+            interval: 30,
+            minTime: '00:00',
+            maxTime: '23:30',
+            startTime: '00:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+        $('#organizer-to-time').timepicker({
+            timeFormat: 'HH:mm',
+            interval: 30,
+            minTime: '00:00',
+            maxTime: '23:30',
+            startTime: '00:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+    </script>
+</div>
+</html>

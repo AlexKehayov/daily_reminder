@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:fragment="data(organizerRecords, filter, total)">
+    <div id="fw-organizerRecords">
+        <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-1-2@s">
+                <label class="uk-form-label" for="organizer-filter-title">Title</label>
+                <input id="organizer-filter-title" class="uk-input" type="text" th:value="${filter.title}">
+            </div>
+            <div class="uk-width-1-2@s">
+                <label class="uk-form-label" for="organizer-filter-content">Content</label>
+                <input id="organizer-filter-content" class="uk-input" type="text" th:value="${filter.content}">
+            </div>
+        </div>
+        <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-1-2@s">
+                <label class="uk-form-label" for="organizer-filter-from-date">Date from</label>
+                <input class="uk-input" id="organizer-filter-from-date" type="text"
+                       th:value="${#dates.format(filter.fromDate,'dd.MM.yyyy')}">
+            </div>
+            <div class="uk-width-1-2@s">
+                <label class="uk-form-label" for="organizer-filter-to-date">Date to</label>
+                <input class="uk-input" id="organizer-filter-to-date" type="text"
+                       th:value="${#dates.format(filter.toDate,'dd.MM.yyyy')}">
+            </div>
+        </div>
+
+        <div style="margin-top: 1%">
+            <button style="margin-right: 5px;min-width: 120px; float: right" id="organizerRecords-filter-clear"
+                    class="uk-button uk-button-grey">Clear
+            </button>
+            <button style="min-width: 120px" id="organizerRecords-filter-submit"
+                    class="uk-button uk-button-primary">Search
+            </button>
+        </div>
+
+    </div>
+    <div id="tw-organizerRecords">
+        <div th:replace="~{organizer/fragments/organizerTableContent :: table(organizerRecords = ${organizerRecords}, filter = ${filter}, total = ${total})}"></div>
+    </div>
+</div>
+</html>

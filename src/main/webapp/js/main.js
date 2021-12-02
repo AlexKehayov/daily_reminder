@@ -1,3 +1,4 @@
+//COMMON
 $(document).ready(function () {
     $("#diary-filter-date-from").datepicker(
         $.extend(
@@ -9,6 +10,7 @@ $(document).ready(function () {
                 showOtherMonths: true,
                 selectOtherMonths: false,
                 dateFormat: 'dd.mm.yy',
+                firstDay: 1,
                 onSelect: function (date) {
                     $("#diary-filter-date-to").datepicker("option", "minDate", date);
                 }
@@ -25,13 +27,49 @@ $(document).ready(function () {
                 showOtherMonths: true,
                 selectOtherMonths: false,
                 dateFormat: 'dd.mm.yy',
+                firstDay: 1,
                 onSelect: function (date) {
                     $("#diary-filter-date-from").datepicker("option", "maxDate", date);
                 }
             }
         ));
+
+    //Organizer filters
+    $("#organizer-filter-from-date").datepicker(
+        $.extend(
+            {},
+            {
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                selectOtherMonths: false,
+                dateFormat: 'dd.mm.yy',
+                firstDay: 1,
+                onSelect: function (date) {
+                    $("#organizer-filter-to-date").datepicker("option", "minDate", date);
+                }
+            }
+        ));
+
+    $("#organizer-filter-to-date").datepicker(
+        $.extend(
+            {},
+            {
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                selectOtherMonths: false,
+                dateFormat: 'dd.mm.yy',
+                firstDay: 1,
+                onSelect: function (date) {
+                    $("#organizer-filter-from-date").datepicker("option", "maxDate", date);
+                }
+            }
+        ));
+
 });
 
+//DIARY
 $(document).on("click", "#save-diary-entry", function (e) {
 
     if (navigator.geolocation) {
@@ -44,7 +82,7 @@ $(document).on("click", "#save-diary-entry", function (e) {
 
 });
 
-function saveDiaryEntry(lat, lng){
+function saveDiaryEntry(lat, lng) {
     let content = $('#diary-content').val();
 
     $.ajax({
@@ -56,10 +94,10 @@ function saveDiaryEntry(lat, lng){
             lng: lng
         },
         success: function (result) {
-            var util = UIkit.util;
-            var accordionEl = util.$('ul[uk-accordion]');
-            UIkit.accordion(accordionEl).toggle();
             $('#diary-content-container').html(result);
+            if ($('#errors').val() == null || $('#errors').val() == ''){
+                UIkit.accordion(UIkit.util.$('ul[uk-accordion]')).toggle();
+            }
             searchDiary(null, null, null, "1");
         },
         error: function () {
@@ -113,7 +151,7 @@ $(document).on("click", ".diary-next-page", function (e) {
     let content = $('#diary-filter-content').val();
     let dateFrom = $('#diary-filter-date-from').val();
     let dateTo = $('#diary-filter-date-to').val();
-    let currentPage = parseInt($('#currentPage').val())+1;
+    let currentPage = parseInt($('#currentPage').val()) + 1;
     searchDiary(content, dateFrom, dateTo, currentPage);
 });
 
@@ -121,11 +159,11 @@ $(document).on("click", ".diary-prev-page", function (e) {
     let content = $('#diary-filter-content').val();
     let dateFrom = $('#diary-filter-date-from').val();
     let dateTo = $('#diary-filter-date-to').val();
-    let currentPage = parseInt($('#currentPage').val())-1;
+    let currentPage = parseInt($('#currentPage').val()) - 1;
     searchDiary(content, dateFrom, dateTo, currentPage);
 });
 
-function searchDiary(content, dateFrom, dateTo, currentPage){
+function searchDiary(content, dateFrom, dateTo, currentPage) {
     $.ajax({
         url: '/dailyReminder/diary/searchDiary',
         type: "post",
@@ -188,14 +226,200 @@ $(document).on("click", ".diary-view-geo-location", function (e) {
     });
 });
 
-function initMap() {
-    const uluru = {lat: 25.0, lng: 42.0};
-    const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 4,
-        center: uluru,
-    });
-    const marker = new google.maps.Marker({
-        position: uluru,
-        map: map,
+//ORGANIZER
+$(document).on("click", "#save-organizer-entry", function (e) {
+    saveOrganizerEntry();
+});
+
+function saveOrganizerEntry() {
+    let title = $('#organizer-title').val();
+    let content = $('#organizer-content').val();
+    let isFixedDate = $('#organizer-is-fixed-date').is(":checked");
+    let fixedDate = $('#organizer-fixed-date').val();
+    let fromDate = $('#organizer-from-date').val();
+    let toDate = $('#organizer-to-date').val();
+    let isFixedTime = $('#organizer-is-fixed-time').is(":checked");
+    let fixedTime = $('#organizer-fixed-time').val();
+    let fromTime = $('#organizer-from-time').val();
+    let toTime = $('#organizer-to-time').val();
+    //ADD GEO LOCATION DATA
+
+    $.ajax({
+        url: '/dailyReminder/organizer/saveEntry',
+        type: "post",
+        data: {
+            title: title,
+            content: content,
+            isFixedDate: isFixedDate,
+            fixedDate: fixedDate,
+            fromDate: fromDate,
+            toDate: toDate,
+            isFixedTime: isFixedTime,
+            fixedTime: fixedTime,
+            fromTime: fromTime,
+            toTime: toTime
+        },
+        success: function (result) {
+            $('#organizer-content-container').html(result);
+            if ($('#errors').val() == null || $('#errors').val() == ''){
+                UIkit.accordion(UIkit.util.$('ul[uk-accordion]')).toggle();
+            }
+            searchOrganizer(null, null, null, null, "1");
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
     });
 }
+
+$(document).on("click", ".delete-organizer-entry", function (e) {
+
+    let id = $(this).attr('data-id');
+
+    $.ajax({
+        url: '/dailyReminder/organizer/deleteEntry',
+        type: "post",
+        data: {
+            id: id
+        },
+        success: function () {
+            searchOrganizer(null, null, null, null, "1");
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("click", "#organizerRecords-filter-clear", function (e) {
+    $('#organizer-filter-content').val('');
+    $('#organizer-filter-title').val('');
+    $('#organizer-filter-from-date').val('');
+    $('#organizer-filter-to-date').val('');
+    searchOrganizer(null, null, null, null, "1");
+});
+
+$(document).on("click", "#organizerRecords-filter-submit", function (e) {
+    let title = $('#organizer-filter-title').val();
+    let content = $('#organizer-filter-content').val();
+    let fromDate = $('#organizer-filter-from-date').val();
+    let toDate = $('#organizer-filter-to-date').val();
+    searchOrganizer(title, content, fromDate, toDate, "1");
+});
+
+$(document).on("click", ".organizer-page", function (e) {
+    let title = $('#organizer-filter-title').val();
+    let content = $('#organizer-filter-content').val();
+    let fromDate = $('#organizer-filter-from-date').val();
+    let toDate = $('#organizer-filter-to-date').val();
+    let currentPage = $(this).val();
+    searchOrganizer(title, content, fromDate, toDate, currentPage);
+});
+
+$(document).on("click", ".organizer-next-page", function (e) {
+    let title = $('#organizer-filter-title').val();
+    let content = $('#organizer-filter-content').val();
+    let fromDate = $('#organizer-filter-from-date').val();
+    let toDate = $('#organizer-filter-to-date').val();
+    let currentPage = parseInt($('#currentPage').val()) + 1;
+    searchOrganizer(title, content, fromDate, toDate, currentPage);
+});
+
+$(document).on("click", ".organizer-prev-page", function (e) {
+    let title = $('#organizer-filter-title').val();
+    let content = $('#organizer-filter-content').val();
+    let fromDate = $('#organizer-filter-from-date').val();
+    let toDate = $('#organizer-filter-to-date').val();
+    let currentPage = parseInt($('#currentPage').val()) - 1;
+    searchOrganizer(title, content, fromDate, toDate, currentPage);
+});
+
+function searchOrganizer(title, content, fromDate, toDate, currentPage) {
+    $.ajax({
+        url: '/dailyReminder/organizer/searchOrganizer',
+        type: "post",
+        data: {
+            title: title,
+            content: content,
+            fromDate: fromDate,
+            toDate: toDate,
+            currentPage: currentPage
+        },
+        success: function (result) {
+            $('#tw-organizerRecords').html(result);
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+}
+
+$(document).on("click", ".organizer-view-content", function (e) {
+    // let content = $(this).attr('data-content');
+    // let createdDate = $(this).attr('data-createdDate');
+
+    $.ajax({
+        url: '/dailyReminder/organizer/initContentModal',
+        type: "post",
+        data: {
+            // content: content,
+            // createdDate: createdDate
+        },
+        success: function (result) {
+            $('#modal-view').html(result);
+            $('#modal-view').addClass('uk-open').show();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("click", ".organizer-view-geo-location", function (e) {
+    let lat = $(this).attr('data-lat');
+    let lng = $(this).attr('data-lng');
+    // let createdDate = $(this).attr('data-createdDate');
+
+    $.ajax({
+        url: '/dailyReminder/organizer/initGeoLocationModal',
+        type: "post",
+        data: {
+            lat: lat,
+            lng: lng,
+            // createdDate: createdDate
+        },
+        success: function (result) {
+            $('#modal-location').html(result);
+            $('#modal-location').addClass('uk-open').show();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("change", "#organizer-is-fixed-date", function (e) {
+    let val = $(this).is(":checked");
+    if(val){
+        $('#organizer-fixed-date').prop('disabled', false).val('');
+        $('#organizer-from-date').prop('disabled', true).val('');
+        $('#organizer-to-date').prop('disabled', true).val('');
+    } else {
+        $('#organizer-fixed-date').prop('disabled', true).val('');
+        $('#organizer-from-date').prop('disabled', false).val('');
+        $('#organizer-to-date').prop('disabled', false).val('');
+    }
+});
+
+$(document).on("change", "#organizer-is-fixed-time", function (e) {
+    let val = $(this).is(":checked");
+    if(val){
+        $('#organizer-fixed-time').prop('disabled', false).val('');
+        $('#organizer-from-time').prop('disabled', true).val('');
+        $('#organizer-to-time').prop('disabled', true).val('');
+    } else {
+        $('#organizer-fixed-time').prop('disabled', true).val('');
+        $('#organizer-from-time').prop('disabled', false).val('');
+        $('#organizer-to-time').prop('disabled', false).val('');
+    }
+});

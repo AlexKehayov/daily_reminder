@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:remove="tag" th:fragment="table(organizerRecords, filter, total)">
+
+    <div th:if="${!#lists.isEmpty(organizerRecords)}" style="margin-top: 1%">
+        <div>
+            <div>
+                <span>Total: </span>
+                <span th:text="${total}"></span>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <div>
+                <table class="uk-table uk-table-striped uk-table-small">
+                    <thead>
+                    <tr>
+                        <th style="width: 20%">Date</th>
+                        <th>Title</th>
+                        <th style="width: 10%">Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item,itemStat : ${organizerRecords}">
+                        <td th:text="${item.fixedDate != null ? #dates.format(item.fixedDate,'dd.MM.yyyy') : (#dates.format(item.fromDate,'dd.MM.yyyy') + ' - ' + #dates.format(item.toDate,'dd.MM.yyyy'))}"></td>
+                        <td th:text="${#strings.abbreviate(item.title, 100)}"></td>
+                        <td class="options text-center">
+                            <a class="organizer-view-content" th:data-id="${item.id}">
+                                <span uk-icon="icon: info"></span>
+                            </a>
+                            <a class="organizer-view-geo-location" th:data-id="${item.id}">
+                                <span uk-icon="icon: world"></span>
+                            </a>
+                            <a th:uk-toggle="'target: #organizer-delete-' + ${item.id}" >
+                                <span uk-icon="icon: trash"></span>
+                            </a>
+                            <div th:id="'organizer-delete-' + ${item.id}" uk-modal>
+                                <div class="uk-modal-dialog uk-modal-body">
+                                    <h2 class="uk-modal-title"> Confirm deletion?</h2>
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button">No</button>
+                                    <button class="delete-organizer-entry uk-button uk-button-primary uk-modal-close" th:data-id="${item.id}" type="button">Yes</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="paginator">
+                    <input type="hidden" id="currentPage" th:value="${filter.page}">
+                    <ul class="uk-pagination uk-flex-center" uk-margin>
+                        <li th:if="${filter.page > 1}" class="organizer-prev-page"><a><span uk-pagination-previous></span></a></li>
+                        <li th:each="i: ${#numbers.sequence(1, (total%filter.pageSize == 0 ? (total/filter.pageSize) : (total/filter.pageSize + 1)))}" th:value="${i}" th:class="${filter.page == i ? 'organizer-page uk-active':'organizer-page'}"><a><span th:style="${filter.page == i ? 'color: red':''}" th:text="${i}"></span></a></li>
+                        <li th:if="${filter.page < (total%filter.pageSize == 0 ? (total/filter.pageSize) : (total/filter.pageSize + 1))}" class="organizer-next-page"><a><span uk-pagination-next></span></a></li>
+                    </ul>
+                </div>
+                <div id="modal-location" uk-modal></div>
+                <div id="modal-view" uk-modal></div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

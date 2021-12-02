@@ -31,13 +31,13 @@ public class DiaryRecordServiceImpl implements DiaryRecordService {
 
     @Override
     public List<DiaryRecordEntity> selectDiaryRecords(DiaryRecordFilter filter) {
-        List<DiaryRecordEntity> result = diaryRecordRepositoryCustom.selectConfigParams(filter);
+        List<DiaryRecordEntity> result = diaryRecordRepositoryCustom.selectDiaryEntries(filter);
         return result;
     }
 
     @Override
     public int selectDiaryRecordsCount(DiaryRecordFilter filter) {
-        return diaryRecordRepositoryCustom.selectConfigParamsCount(filter);
+        return diaryRecordRepositoryCustom.selectDiaryEntriesCount(filter);
     }
 
     @Override

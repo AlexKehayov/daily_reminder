@@ -5,6 +5,23 @@
 <div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/calendar.jpg); background-size:cover" uk-height-viewport>
     <nav th:replace="~{fragments/navbar :: nav}"></nav>
 
+    <div uk-alert>
+        <ul uk-accordion>
+            <li>
+                <a class="uk-accordion-title" href="#">Search entries</a>
+                <div class="uk-accordion-content">
+                    <div th:replace="~{organizer/fragments/organizerTable :: data(organizerRecords = ${organizerRecords}, filter = ${filter}, total = ${total})}"></div>
+                </div>
+            </li>
+            <li id="create-organizer-entry-li">
+                <a class="uk-accordion-title" href="#">Create new entry</a>
+                <div class="uk-accordion-content" id="organizer-content-container">
+                    <div th:replace="~{organizer/fragments/organizerContent :: organizerContent(organizerEntry = ${organizerEntry}, errors = null, message = null)}"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
 </div>
 </body>
 </html>
