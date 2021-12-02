@@ -242,7 +242,9 @@ function saveOrganizerEntry() {
     let fixedTime = $('#organizer-fixed-time').val();
     let fromTime = $('#organizer-from-time').val();
     let toTime = $('#organizer-to-time').val();
-    //ADD GEO LOCATION DATA
+    let geoLat = $('#organizer-geo-lat').val();
+    let geoLng = $('#organizer-geo-lng').val();
+    let geoPlace = $('#organizer-geo-place').val();
 
     $.ajax({
         url: '/dailyReminder/organizer/saveEntry',
@@ -257,7 +259,10 @@ function saveOrganizerEntry() {
             isFixedTime: isFixedTime,
             fixedTime: fixedTime,
             fromTime: fromTime,
-            toTime: toTime
+            toTime: toTime,
+            geoLat: geoLat,
+            geoLng: geoLng,
+            geoPlace: geoPlace
         },
         success: function (result) {
             $('#organizer-content-container').html(result);
@@ -355,15 +360,13 @@ function searchOrganizer(title, content, fromDate, toDate, currentPage) {
 }
 
 $(document).on("click", ".organizer-view-content", function (e) {
-    // let content = $(this).attr('data-content');
-    // let createdDate = $(this).attr('data-createdDate');
+    let id = $(this).attr('data-id');
 
     $.ajax({
         url: '/dailyReminder/organizer/initContentModal',
         type: "post",
         data: {
-            // content: content,
-            // createdDate: createdDate
+            id: id
         },
         success: function (result) {
             $('#modal-view').html(result);
@@ -376,17 +379,13 @@ $(document).on("click", ".organizer-view-content", function (e) {
 });
 
 $(document).on("click", ".organizer-view-geo-location", function (e) {
-    let lat = $(this).attr('data-lat');
-    let lng = $(this).attr('data-lng');
-    // let createdDate = $(this).attr('data-createdDate');
+    let id = $(this).attr('data-id');
 
     $.ajax({
         url: '/dailyReminder/organizer/initGeoLocationModal',
         type: "post",
         data: {
-            lat: lat,
-            lng: lng,
-            // createdDate: createdDate
+            id: id
         },
         success: function (result) {
             $('#modal-location').html(result);
@@ -422,4 +421,30 @@ $(document).on("change", "#organizer-is-fixed-time", function (e) {
         $('#organizer-from-time').prop('disabled', false).val('');
         $('#organizer-to-time').prop('disabled', false).val('');
     }
+});
+
+$(document).on("input", "#organizer-geo-place", function (e) {
+    let name = $(this).val();
+    $.ajax({
+        url: '/dailyReminder/organizer/locationsAutoComplete',
+        type: "post",
+        data: {
+            name: name
+        },
+        success: function (result) {
+            $('#location-dropdown-wrapper').html(result);
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("click", ".place-option", function (e) {
+    let locationName = $(this).attr('data-locationName');
+    let lat = $(this).attr('data-lat');
+    let lng = $(this).attr('data-lng');
+    $('#organizer-geo-place').val(locationName);
+    $('#organizer-geo-lat').val(lat);
+    $('#organizer-geo-lng').val(lng);
 });

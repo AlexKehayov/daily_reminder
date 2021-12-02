@@ -3,7 +3,13 @@
 <div class="uk-modal-dialog uk-modal-body" style="width: 80%; height: auto"
      th:fragment="view-content(organizerEntry)">
     <button class="uk-modal-close-default" type="button" uk-close></button>
-<!--    <h2 class="uk-modal-title"><span th:text="${createdDate}"></span></h2>-->
-<!--    <p th:text="${content}"></p>-->
+    <h2 class="uk-modal-title"><span th:text="${organizerEntry.title}"></span></h2>
+    <p th:text="${organizerEntry.content}"></p>
+    <p th:text="${'Created on: ' + #dates.format(organizerEntry.createdDate,'dd.MM.yyyy')}"></p>
+    <p th:if="${organizerEntry.isFixedDate}" th:text="${'Fixed for date: ' + #dates.format(organizerEntry.fixedDate,'dd.MM.yyyy')}"></p>
+    <p th:if="${!organizerEntry.isFixedDate}" th:text="${'Fixed for dates: ' + #dates.format(organizerEntry.fromDate,'dd.MM.yyyy') + ' - ' + #dates.format(organizerEntry.toDate,'dd.MM.yyyy')}"></p>
+    <p th:if="${organizerEntry.isFixedTime}" th:text="${'Fixed for time: ' + #temporals.format(organizerEntry.fixedTime,'HH:mm')}"></p>
+    <p th:if="${!organizerEntry.isFixedTime}" th:text="${'Fixed for time: ' + #temporals.format(organizerEntry.fromTime,'HH:mm') + ' - ' + #temporals.format(organizerEntry.toTime,'HH:mm')}"></p>
+    <p th:if="${organizerEntry.geoPlace != null && organizerEntry.geoPlace != ''}" th:text="${'Fixed for place: ' + organizerEntry.geoPlace}"></p>
 </div>
 </html>

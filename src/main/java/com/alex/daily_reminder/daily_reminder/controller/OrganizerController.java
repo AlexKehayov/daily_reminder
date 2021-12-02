@@ -2,8 +2,11 @@ package com.alex.daily_reminder.daily_reminder.controller;
 
 import com.alex.daily_reminder.daily_reminder.filter.OrganizerRecordFilter;
 import com.alex.daily_reminder.daily_reminder.model.OrganizerRecordEntity;
+import com.alex.daily_reminder.daily_reminder.model.PlaceEntity;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.service.OrganizerRecordService;
+import com.alex.daily_reminder.daily_reminder.service.PlacesService;
+import com.alex.daily_reminder.daily_reminder.util.JsonUtil;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.alex.daily_reminder.daily_reminder.validation.OrganizerEntryValidator;
 import com.alex.daily_reminder.daily_reminder.validation.ValidationError;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +33,7 @@ public class OrganizerController {
     private final SecurityUtil securityUtil;
     private final OrganizerEntryValidator organizerEntryValidator;
     private final OrganizerRecordService organizerRecordService;
+    private final PlacesService placesService;
 
     @GetMapping
     public String getOrganizerHome(Model model) {
@@ -56,6 +61,9 @@ public class OrganizerController {
             @RequestParam(required = false) String fixedTime,
             @RequestParam(required = false) String fromTime,
             @RequestParam(required = false) String toTime,
+            @RequestParam(required = false) Double geoLat,
+            @RequestParam(required = false) Double geoLng,
+            @RequestParam(required = false) String geoPlace,
             Model model) throws ParseException {
 
         OrganizerRecordEntity organizerRecordEntity = new OrganizerRecordEntity();
@@ -77,6 +85,12 @@ public class OrganizerController {
             organizerRecordEntity.setFromTime(LocalTime.parse(fromTime));
         if (StringUtils.hasText(toTime))
             organizerRecordEntity.setToTime(LocalTime.parse(toTime));
+        if(Objects.nonNull(geoLat))
+            organizerRecordEntity.setGeoLat(geoLat);
+        if(Objects.nonNull(geoLng))
+            organizerRecordEntity.setGeoLng(geoLng);
+        if (StringUtils.hasText(geoPlace))
+            organizerRecordEntity.setGeoPlace(geoPlace);
 
         List<ValidationError> errors = organizerEntryValidator.validate(organizerRecordEntity);
         if (!CollectionUtils.isEmpty(errors)) {
@@ -135,24 +149,25 @@ public class OrganizerController {
 
     @PostMapping("/initContentModal")
     public String initContentModal(
-//            @RequestParam String content,
-//            @RequestParam String createdDate,
-            Model model) throws ParseException {
-//        model.addAttribute("content", content);
-//        model.addAttribute("createdDate", new SimpleDateFormat("yy-MM-dd HH:mm:ss.S").parse(createdDate));
+            @RequestParam Integer id,
+            Model model) {
+        model.addAttribute("organizerEntry", organizerRecordService.selectOrganizerRecordById(id));
         return "organizer/modals/viewContent :: view-content";
     }
 
     @PostMapping("/initGeoLocationModal")
     public String initGeoLocationModal(
-            @RequestParam Double lat,
-            @RequestParam Double lng,
-//            @RequestParam String createdDate,
-            Model model) throws ParseException {
-        model.addAttribute("geoLat", lat);
-        model.addAttribute("geoLng", lng);
-//        model.addAttribute("createdDate", new SimpleDateFormat("yy-MM-dd HH:mm:ss.S").parse(createdDate));
+            @RequestParam Integer id,
+            Model model) {
+        model.addAttribute("organizerEntry", organizerRecordService.selectOrganizerRecordById(id));
         return "organizer/modals/viewGeoLocation :: view-geo-location";
+    }
+
+    @PostMapping("/locationsAutoComplete")
+    public String locationsAutoComplete(@RequestParam String name, Model model) {
+        List<PlaceEntity> placeEntities = placesService.autoCompletePlaces(name);
+        model.addAttribute("items", placeEntities);
+        return "organizer/fragments/locationsDropdown :: data";
     }
 
     private void fillData(Model model, OrganizerRecordFilter filter) {

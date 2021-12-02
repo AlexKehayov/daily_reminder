@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:remove="tag" th:fragment="data(items)">
+    <th:block th:each="item : ${items}">
+        <li>
+            <a class="place-option" th:text="${item.locationName}" th:data-locationName="${item.locationName}" th:data-lat="${item.lat}" th:data-lng="${item.lng}"></a>
+        </li>
+    </th:block>
+</div>
+</html>

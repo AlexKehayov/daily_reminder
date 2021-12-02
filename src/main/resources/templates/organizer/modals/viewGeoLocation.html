@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <div class="uk-modal-dialog uk-modal-body" style="width: 80%; height: auto"
-     th:fragment="view-geo-location(geoLat, geoLng, organizerEntry)">
+     th:fragment="view-geo-location(organizerEntry)">
     <button class="uk-modal-close-default" type="button" uk-close></button>
-<!--    <h2 class="uk-modal-title"><span th:text="${createdDate}"></span></h2>-->
+    <h2 class="uk-modal-title"><span th:text="${organizerEntry.title + ' | ' + (organizerEntry.isFixedDate ? #dates.format(organizerEntry.fixedDate,'dd.MM.yyyy') : (#dates.format(organizerEntry.fromDate,'dd.MM.yyyy') + ' - ' + #dates.format(organizerEntry.toDate,'dd.MM.yyyy'))) + ' | ' + (organizerEntry.isFixedTime ? #temporals.format(organizerEntry.fixedTime,'HH:mm') : (#temporals.format(organizerEntry.fromTime,'HH:mm') + ' - ' + #temporals.format(organizerEntry.toTime,'HH:mm')))}"></span></h2>
 
     <div id="map" class="map"></div>
-    <input type="hidden" id="geoLat" th:value="${geoLat}">
-    <input type="hidden" id="geoLng" th:value="${geoLng}">
+    <input type="hidden" id="geoLat" th:value="${organizerEntry.geoLat}">
+    <input type="hidden" id="geoLng" th:value="${organizerEntry.geoLng}">
     <script type="text/javascript">
 
         $(document).ready(function () {

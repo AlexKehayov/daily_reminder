@@ -28,7 +28,7 @@
                             <a class="organizer-view-content" th:data-id="${item.id}">
                                 <span uk-icon="icon: info"></span>
                             </a>
-                            <a class="organizer-view-geo-location" th:data-id="${item.id}">
+                            <a th:if="${item.geoLat != null && item.geoLng != null}" class="organizer-view-geo-location" th:data-id="${item.id}">
                                 <span uk-icon="icon: world"></span>
                             </a>
                             <a th:uk-toggle="'target: #organizer-delete-' + ${item.id}" >

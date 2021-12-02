@@ -103,22 +103,29 @@
     <div class="uk-grid-small" uk-grid style="margin-bottom: 1%">
         <div class="uk-width-1-1@s">
             <label class="uk-form-label" for="organizer-geo-place">Place</label>
-            <input class="uk-input" id="organizer-geo-place" type="text"
+            <input class="uk-input uk-autocomplete" id="organizer-geo-place" type="text"
                    th:value="${organizerEntry?.geoPlace}">
+            <div uk-dropdown="mode: click" id="places-autocomplete">
+                <ul id="location-dropdown-wrapper" class="uk-nav uk-dropdown-nav">
+                    <div th:replace="~{organizer/fragments/locationsDropdown :: data(items = ${null})}"></div>
+                </ul>
+            </div>
             <th:block th:each="error : ${errors}">
                 <p th:if="${error.pointer.equals('geoPlace')}" style="color: red"
                    th:text="${error.message}">Validation error</p>
             </th:block>
+            <input type="hidden" id="organizer-geo-lat" th:value="${organizerEntry?.geoLat}">
+            <input type="hidden" id="organizer-geo-lng" th:value="${organizerEntry?.geoLng}">
         </div>
     </div>
     <button id="save-organizer-entry" class="uk-button uk-button-primary">Save</button>
     <input type="hidden" id="errors" th:value="${errors}">
     <script>
-
         $("#organizer-from-date").datepicker(
             $.extend(
                 {},
                 {
+                    minDate: 0,
                     changeMonth: true,
                     changeYear: true,
                     showOtherMonths: true,
@@ -151,6 +158,7 @@
             $.extend(
                 {},
                 {
+                    minDate: 0,
                     changeMonth: true,
                     changeYear: true,
                     showOtherMonths: true,
@@ -190,6 +198,7 @@
             dropdown: true,
             scrollbar: true
         });
+
     </script>
 </div>
 </html>
