@@ -2,9 +2,11 @@ package com.alex.daily_reminder.daily_reminder.security.service;
 
 import com.alex.daily_reminder.daily_reminder.security.mapper.UserMapper;
 import com.alex.daily_reminder.daily_reminder.security.model.ApplicationUser;
+import com.alex.daily_reminder.daily_reminder.security.model.ChangeUserDetailsDTO;
 import com.alex.daily_reminder.daily_reminder.security.model.UserDTO;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.security.repository.UserRepository;
+import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -74,7 +76,16 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
     }
 
     @Override
+    public void updateUser(ChangeUserDetailsDTO changeUserDetailsDTO, SecurityUtil securityUtil) throws Exception {
+        UserEntity loggedUser = securityUtil.getLoggedUser();
+        loggedUser.setEmail(changeUserDetailsDTO.getEmail());
+        loggedUser.setPassword(passwordEncoder.encode(changeUserDetailsDTO.getNewPassword()));
+        userRepository.save(loggedUser);
+    }
+
+    @Override
     public UserEntity findByUsername(String username) {
-        return userRepository.findByUsername(username).get(0);
+        List<UserEntity> users = userRepository.findByUsername(username);
+        return users.isEmpty()? null : users.get(0);
     }
 }
