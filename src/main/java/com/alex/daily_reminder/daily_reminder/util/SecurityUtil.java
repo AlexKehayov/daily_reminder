@@ -30,4 +30,20 @@ public class SecurityUtil {
         return null;
     }
 
+    public boolean hasRole(String role){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        UserEntity user = applicationUserService.findUserByUsername(username);
+        String authorities = user.getGrantedAuthorities();
+        if (StringUtils.hasText(authorities)){
+            return authorities.contains(role);
+        }
+        return false;
+    }
+
 }

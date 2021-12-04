@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import static com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission.*;
 
 public enum SecurityRole {
-    ADMIN(Sets.newHashSet(ADMIN_READ, ADMIN_WRITE, USER_READ, USER_WRITE)),
-    USER(Sets.newHashSet(USER_READ, USER_WRITE));
+    ADMIN(Sets.newHashSet(ADMIN_ADMINISTRATE)),
+    USER(Sets.newHashSet(USER_READ_DIARY, USER_WRITE_DIARY, USER_READ_ORGANIZER, USER_WRITE_ORGANIZER));
 
     private final Set<SecurityPermission> permissions;
 

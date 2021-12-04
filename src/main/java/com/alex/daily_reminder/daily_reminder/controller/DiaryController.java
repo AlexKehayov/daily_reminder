@@ -32,6 +32,7 @@ public class DiaryController {
     private final DiaryRecordService diaryRecordService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('user:read_diary')")
     public String getDiaryHome(Model model) {
 
         UserEntity loggedUser = securityUtil.getLoggedUser();
@@ -45,6 +46,7 @@ public class DiaryController {
     }
 
     @PostMapping("/saveEntry")
+    @PreAuthorize("hasAuthority('user:write_diary')")
     public String saveDiaryEntry(
             @RequestParam String content,
             @RequestParam(required = false) Double lat,
@@ -74,6 +76,7 @@ public class DiaryController {
     }
 
     @PostMapping("/deleteEntry")
+    @PreAuthorize("hasAuthority('user:write_diary')")
     @ResponseBody
     public void deleteDiaryEntry(
             @RequestParam Integer id) {
@@ -81,6 +84,7 @@ public class DiaryController {
     }
 
     @PostMapping("/searchDiary")
+    @PreAuthorize("hasAuthority('user:read_diary')")
     public String searchDiary(
             @RequestParam(required = false) String content,
             @RequestParam(required = false) String dateFrom,
@@ -108,6 +112,7 @@ public class DiaryController {
     }
 
     @PostMapping("/initContentModal")
+    @PreAuthorize("hasAuthority('user:read_diary')")
     public String initContentModal(
             @RequestParam String content,
             @RequestParam String createdDate,
@@ -118,6 +123,7 @@ public class DiaryController {
     }
 
     @PostMapping("/initGeoLocationModal")
+    @PreAuthorize("hasAuthority('user:read_diary')")
     public String initGeoLocationModal(
             @RequestParam Double lat,
             @RequestParam Double lng,

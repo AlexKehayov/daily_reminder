@@ -13,6 +13,7 @@ import com.alex.daily_reminder.daily_reminder.validation.OrganizerEntryValidator
 import com.alex.daily_reminder.daily_reminder.validation.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -28,6 +29,7 @@ import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 @RequestMapping("/organizer")
 public class OrganizerController {
 
@@ -39,6 +41,7 @@ public class OrganizerController {
     private final ApplicationUserService userService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('user:read_organizer')")
     public String getOrganizerHome(Model model) {
 
         UserEntity loggedUser = securityUtil.getLoggedUser();
@@ -53,6 +56,7 @@ public class OrganizerController {
     }
 
     @PostMapping("/saveEntry")
+    @PreAuthorize("hasAuthority('user:write_organizer')")
     public String saveOrganizerEntry(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String content,
@@ -113,6 +117,7 @@ public class OrganizerController {
     }
 
     @PostMapping("/deleteEntry")
+    @PreAuthorize("hasAuthority('user:write_organizer')")
     @ResponseBody
     public void deleteDiaryEntry(
             @RequestParam Integer id) {
@@ -120,6 +125,7 @@ public class OrganizerController {
     }
 
     @PostMapping("/searchOrganizer")
+    @PreAuthorize("hasAuthority('user:read_organizer')")
     public String searchDiary(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String content,
@@ -151,6 +157,7 @@ public class OrganizerController {
     }
 
     @PostMapping("/initContentModal")
+    @PreAuthorize("hasAuthority('user:read_organizer')")
     public String initContentModal(
             @RequestParam Integer id,
             Model model) {
@@ -159,6 +166,7 @@ public class OrganizerController {
     }
 
     @PostMapping("/initGeoLocationModal")
+    @PreAuthorize("hasAuthority('user:read_organizer')")
     public String initGeoLocationModal(
             @RequestParam Integer id,
             Model model) {
@@ -181,7 +189,7 @@ public class OrganizerController {
     }
 
     @Scheduled(cron = "0 0 12 * * *") //every day at 12:00 s/m/h/...      for every minute cron = "* */1 * * * *"
-    private void sendReminders() {
+    public void sendReminders() {
         List<OrganizerRecordEntity> organizerRecordEntities = organizerRecordService.selectOrganizerRecordsForTomorrow();
         String subject = "A quick reminder from Daily Reminder :)";
         String text;

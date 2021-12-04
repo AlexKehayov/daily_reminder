@@ -3,7 +3,7 @@
 <div class="uk-modal-dialog uk-modal-body" style="width: 80%; height: auto"
      th:fragment="view-geo-location(geoLat, geoLng, createdDate)">
     <button class="uk-modal-close-default" type="button" uk-close></button>
-    <h2 class="uk-modal-title"><span th:text="${createdDate}"></span></h2>
+    <h2 class="uk-modal-title"><span th:text="${#dates.format(createdDate,'dd.MM.yyyy HH:mm')}"></span></h2>
 
     <div id="map" class="map"></div>
     <input type="hidden" id="geoLat" th:value="${geoLat}">
