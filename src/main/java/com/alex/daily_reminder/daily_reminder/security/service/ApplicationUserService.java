@@ -34,7 +34,15 @@ public class ApplicationUserService implements UserDetailsService {
         applicationUserDao.updateUser(changeUserDetailsDTO, securityUtil);
     }
 
+    public void saveUserEntity(UserEntity userEntity) {
+        applicationUserDao.saveUserEntity(userEntity);
+    }
+
     public UserEntity findUserByUsername(String username) {
         return applicationUserDao.findByUsername(username);
+    }
+
+    public UserEntity findUserByEmail(String email) {
+        return applicationUserDao.findByEmail(email);
     }
 }

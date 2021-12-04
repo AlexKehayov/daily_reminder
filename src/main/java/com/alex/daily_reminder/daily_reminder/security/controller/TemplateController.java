@@ -6,20 +6,21 @@ import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.security.service.ApplicationUserService;
 import com.alex.daily_reminder.daily_reminder.security.validator.ChangeUserDetailsValidator;
 import com.alex.daily_reminder.daily_reminder.security.validator.RegistrationValidator;
+import com.alex.daily_reminder.daily_reminder.util.EmailUtil;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.alex.daily_reminder.daily_reminder.validation.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +31,8 @@ public class TemplateController {
     private final SecurityUtil securityUtil;
     private final RegistrationValidator registrationValidator;
     private final ChangeUserDetailsValidator changeUserDetailsValidator;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailUtil emailUtil;
 
     @GetMapping
     public String getIndexView() {
@@ -114,6 +117,32 @@ public class TemplateController {
         }
 
         return "redirect:/logout";
+    }
+
+    @GetMapping("/recoverPasswordForm")
+    public String recoverPasswordForm(Model model) {
+        model.addAttribute("recoveryEmail", "");
+        return "recoverPassword";
+    }
+
+    @PostMapping("/recoverPassword")
+    public String recoverPassword(
+            @RequestParam(required = false) String recoveryEmail) {
+
+        if (StringUtils.hasText(recoveryEmail)){
+            UserEntity user = applicationUserService.findUserByEmail(recoveryEmail);
+
+            Random r = new Random( System.currentTimeMillis() );
+            int newIntPass = 10000 + r.nextInt(20000);
+            String generatedPassword = Integer.toString(newIntPass);
+
+            user.setPassword(passwordEncoder.encode(generatedPassword));
+            applicationUserService.saveUserEntity(user);
+
+            emailUtil.sendEmail("New password for DailyReminder", "Your new password: " + generatedPassword + ". Change it when you log in.", user.getEmail());
+        }
+
+        return "redirect:/login";
     }
 
 }

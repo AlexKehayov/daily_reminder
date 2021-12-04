@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 
                 .authorizeRequests()
-                .antMatchers("/", "/registrationForm", "/register", "index", "/css/**", "/js/**", "/images/**").permitAll()
+                .antMatchers("/", "/registrationForm", "/recoverPasswordForm", "/register", "/recoverPassword", "index", "/css/**", "/js/**", "/images/**").permitAll()
 //                .antMatchers("/home").hasRole(USER.name()) //order matters, better use annotations instead
                 .anyRequest()
                 .authenticated()

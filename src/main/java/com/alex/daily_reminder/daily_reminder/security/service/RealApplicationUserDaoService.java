@@ -61,8 +61,19 @@ public class RealApplicationUserDaoService implements ApplicationUserDao {
     }
 
     @Override
+    public void saveUserEntity(UserEntity userEntity) {
+        userRepository.save(userEntity);
+    }
+
+    @Override
     public UserEntity findByUsername(String username) {
         List<UserEntity> users = userRepository.findByUsername(username);
+        return users.isEmpty()? null : users.get(0);
+    }
+
+    @Override
+    public UserEntity findByEmail(String email) {
+        List<UserEntity> users = userRepository.findByEmail(email);
         return users.isEmpty()? null : users.get(0);
     }
 }

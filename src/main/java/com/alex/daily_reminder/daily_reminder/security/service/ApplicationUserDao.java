@@ -16,6 +16,10 @@ public interface ApplicationUserDao {
 
     void updateUser(ChangeUserDetailsDTO changeUserDetailsDTO, SecurityUtil securityUtil) throws Exception;
 
+    void saveUserEntity(UserEntity userEntity);
+
     UserEntity findByUsername(String username);
+
+    UserEntity findByEmail(String email);
 
 }
