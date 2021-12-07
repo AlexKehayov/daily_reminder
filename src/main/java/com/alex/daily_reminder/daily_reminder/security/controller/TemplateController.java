@@ -47,6 +47,16 @@ public class TemplateController {
         return "login";
     }
 
+    @GetMapping("/custom403")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String getCustom403View(Model model) {
+        UserEntity loggedUser = securityUtil.getLoggedUser();
+        if (Objects.nonNull(loggedUser)) {
+            model.addAttribute("loggedUser", loggedUser);
+        }
+        return "custom403";
+    }
+
     @GetMapping(value = {"/home"})
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String getHomeView(Model model) {

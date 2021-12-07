@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/head :: head_declaration}"></head>
+<body>
+<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/cave.jpg); background-size:cover" uk-height-viewport>
+
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
+
+    <div>
+        <img data-src="images/u_shall_not_pass.jpg" style="margin-left: 40%; margin-right: 40%; margin-top: 3%; width: 20%;" alt="" uk-img>
+    </div>
+
+    <div class="uk-alert-danger" style="text-align: center" uk-alert>
+        <p>ACCESS DENIED</p>
+    </div>
+
+</div>
+</body>
+</html>

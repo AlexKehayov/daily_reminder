@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<nav th:fragment="nav" class="uk-navbar-container" uk-navbar style="margin-top: -70px">
+<nav th:fragment="nav" th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}" class="uk-navbar-container" uk-navbar style="margin-top: -70px">
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
             <li><span th:text="${'  Welcome to Daily Reminder, ' + loggedUser.getFirstName() + ' ' + loggedUser.getLastName()}"></span></li>
@@ -19,6 +19,7 @@
                     </ul>
                 </div>
             </li>
+            <li th:if="${securityUtil.hasRole('ROLE_ADMIN')}"><a href="/dailyReminder/admin">Admin console</a></li>
             <li><a href="/dailyReminder/logout">Logout</a></li>
         </ul>
     </div>

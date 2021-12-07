@@ -3,10 +3,14 @@ package com.alex.daily_reminder.daily_reminder.util;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.security.service.ApplicationUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Component
 @AllArgsConstructor
@@ -30,18 +34,15 @@ public class SecurityUtil {
         return null;
     }
 
-    public boolean hasRole(String role){
+    public static boolean hasRole(String role){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-        UserEntity user = applicationUserService.findUserByUsername(username);
-        String authorities = user.getGrantedAuthorities();
-        if (StringUtils.hasText(authorities)){
-            return authorities.contains(role);
+            Collection<? extends GrantedAuthority> authoritiesCollection = ((UserDetails) principal).getAuthorities();
+            ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>(authoritiesCollection);
+            for (GrantedAuthority ga : grantedAuthorities){
+                if (ga.getAuthority().equals(role))
+                    return true;
+            }
         }
         return false;
     }

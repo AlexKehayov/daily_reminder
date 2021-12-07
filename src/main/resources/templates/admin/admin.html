@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/head :: head_declaration}"></head>
+<body>
+<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade"
+     style="background-image: url(images/adminPage.jpg); background-size:cover" uk-height-viewport>
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
+
+    <div uk-alert>
+        <ul uk-accordion>
+            <li>
+                <a class="uk-accordion-title" href="#">Search users</a>
+                <div class="uk-accordion-content">
+<!--                    <div th:replace="~{diary/fragments/diaryTable :: data(diaryRecords = ${diaryRecords}, filter = ${filter}, total = ${total})}"></div>-->
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

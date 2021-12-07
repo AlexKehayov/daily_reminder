@@ -1,7 +1,6 @@
 package com.alex.daily_reminder.daily_reminder.security.config;
 
 import com.alex.daily_reminder.daily_reminder.security.service.ApplicationUserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
 
-        //THIS IS FOR FORM LOGIN
+                //THIS IS FOR FORM LOGIN
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -53,7 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/dailyReminder/login");
+                .logoutSuccessUrl("/dailyReminder/login")
+                .and()
+                .exceptionHandling().accessDeniedPage("/custom403");
 
 
     }
