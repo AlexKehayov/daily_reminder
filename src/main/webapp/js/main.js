@@ -448,3 +448,136 @@ $(document).on("click", ".place-option", function (e) {
     $('#organizer-geo-lat').val(lat);
     $('#organizer-geo-lng').val(lng);
 });
+
+//ADMIN
+$(document).on("click", "#save-user-entry", function (e) {
+    let username = $(this).attr('data-username');
+    let diaryRead = $('#diary-read').is(":checked");
+    let diaryWrite = $('#diary-write').is(":checked");
+    let organizerRead = $('#organizer-read').is(":checked");
+    let organizerWrite = $('#organizer-write').is(":checked");
+    let isEnabled = $('#user-enabled').is(":checked");
+    saveUserEntry(username, diaryRead, diaryWrite, organizerRead, organizerWrite, isEnabled);
+});
+
+function saveUserEntry(username, diaryRead, diaryWrite, organizerRead, organizerWrite, isEnabled) {
+
+    $.ajax({
+        url: '/dailyReminder/admin/saveEntry',
+        type: "post",
+        data: {
+            username: username,
+            diaryRead: diaryRead,
+            diaryWrite: diaryWrite,
+            organizerRead: organizerRead,
+            organizerWrite: organizerWrite,
+            isEnabled: isEnabled
+        },
+        success: function () {
+            $('.uk-modal-close-default').click();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+}
+
+$(document).on("click", ".delete-user-entry", function (e) {
+
+    let username = $(this).attr('data-username');
+
+    $.ajax({
+        url: '/dailyReminder/admin/deleteEntry',
+        type: "post",
+        data: {
+            username: username
+        },
+        success: function () {
+            searchUsers(null, null, null, null, "1");
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("click", "#users-filter-clear", function (e) {
+    $('#user-filter-username').val('');
+    $('#user-filter-first-name').val('');
+    $('#user-filter-last-name').val('');
+    $('#user-filter-email').val('');
+    searchUsers(null, null, null, null, "1");
+});
+
+$(document).on("click", "#users-filter-submit", function (e) {
+    let username = $('#user-filter-username').val();
+    let firstName = $('#user-filter-first-name').val();
+    let lastName = $('#user-filter-last-name').val();
+    let email = $('#user-filter-email').val();
+    searchUsers(username, firstName, lastName, email, "1");
+});
+
+$(document).on("click", ".users-page", function (e) {
+    let username = $('#user-filter-username').val();
+    let firstName = $('#user-filter-first-name').val();
+    let lastName = $('#user-filter-last-name').val();
+    let email = $('#user-filter-email').val();
+    let currentPage = $(this).val();
+    searchUsers(username, firstName, lastName, email, currentPage);
+});
+
+$(document).on("click", ".users-next-page", function (e) {
+    let username = $('#user-filter-username').val();
+    let firstName = $('#user-filter-first-name').val();
+    let lastName = $('#user-filter-last-name').val();
+    let email = $('#user-filter-email').val();
+    let currentPage = parseInt($('#currentPage').val()) + 1;
+    searchUsers(username, firstName, lastName, email, currentPage);
+});
+
+$(document).on("click", ".users-prev-page", function (e) {
+    let username = $('#user-filter-username').val();
+    let firstName = $('#user-filter-first-name').val();
+    let lastName = $('#user-filter-last-name').val();
+    let email = $('#user-filter-email').val();
+    let currentPage = parseInt($('#currentPage').val()) - 1;
+    searchUsers(username, firstName, lastName, email, currentPage);
+});
+
+function searchUsers(username, firstName, lastName, email, currentPage) {
+    $.ajax({
+        url: '/dailyReminder/admin/searchUsers',
+        type: "post",
+        data: {
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            currentPage: currentPage
+        },
+        success: function (result) {
+            $('#tw-users').html(result);
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+}
+
+$(document).on("click", ".user-configure", function (e) {
+    let username = $(this).attr('data-username');
+    $.ajax({
+        url: '/dailyReminder/admin/initConfigureModal',
+        type: "post",
+        data: {
+            username: username
+        },
+        success: function (result) {
+            $('#modal-configure').html(result);
+            $('#modal-configure').addClass('uk-open').show();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});

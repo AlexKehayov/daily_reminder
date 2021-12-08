@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<nav th:fragment="nav" th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}" class="uk-navbar-container" uk-navbar style="margin-top: -70px">
+<nav th:fragment="nav" th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}" class="uk-navbar-container" uk-navbar style="margin-top: -70px">
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
             <li><span th:text="${'  Welcome to Daily Reminder, ' + loggedUser.getFirstName() + ' ' + loggedUser.getLastName()}"></span></li>
@@ -13,8 +13,8 @@
                 <div class="uk-navbar-dropdown">
                     <ul class="uk-nav uk-navbar-dropdown-nav">
                         <li><a href="/dailyReminder/home">Home</a></li>
-                        <li><a href="/dailyReminder/diary">Diary</a></li>
-                        <li><a href="/dailyReminder/organizer">Organizer</a></li>
+                        <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}"><a href="/dailyReminder/diary">Diary</a></li>
+                        <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_ORGANIZER.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_ORGANIZER.getPermission())}"><a href="/dailyReminder/organizer">Organizer</a></li>
                         <li><a href="/dailyReminder/changeUserDetailsForm">Change user details</a></li>
                     </ul>
                 </div>

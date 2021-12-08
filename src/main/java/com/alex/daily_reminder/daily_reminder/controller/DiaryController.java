@@ -32,7 +32,7 @@ public class DiaryController {
     private final DiaryRecordService diaryRecordService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user:read_diary')")
+    @PreAuthorize("hasAnyAuthority('user:read_diary', 'user:write_diary')")
     public String getDiaryHome(Model model) {
 
         UserEntity loggedUser = securityUtil.getLoggedUser();

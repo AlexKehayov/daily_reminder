@@ -2,18 +2,18 @@
 <html lang="en">
 <head th:replace="~{fragments/head :: head_declaration}"></head>
 <body>
-<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/calendar.jpg); background-size:cover" uk-height-viewport>
+<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/calendar.jpg); background-size:cover" uk-height-viewport th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}">
     <nav th:replace="~{fragments/navbar :: nav}"></nav>
 
     <div uk-alert>
         <ul uk-accordion>
-            <li>
+            <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_ORGANIZER.getPermission())}">
                 <a class="uk-accordion-title" href="#">Search entries</a>
                 <div class="uk-accordion-content">
                     <div th:replace="~{organizer/fragments/organizerTable :: data(organizerRecords = ${organizerRecords}, filter = ${filter}, total = ${total})}"></div>
                 </div>
             </li>
-            <li id="create-organizer-entry-li">
+            <li id="create-organizer-entry-li" th:if="${securityUtil.hasRole(securityPermission.USER_WRITE_ORGANIZER.getPermission())}">
                 <a class="uk-accordion-title" href="#">Create new entry</a>
                 <div class="uk-accordion-content" id="organizer-content-container">
                     <div th:replace="~{organizer/fragments/organizerContent :: organizerContent(organizerEntry = ${organizerEntry}, errors = null, message = null)}"></div>

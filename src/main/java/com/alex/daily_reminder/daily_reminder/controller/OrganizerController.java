@@ -41,7 +41,7 @@ public class OrganizerController {
     private final ApplicationUserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user:read_organizer')")
+    @PreAuthorize("hasAnyAuthority('user:read_organizer', 'user:write_organizer')")
     public String getOrganizerHome(Model model) {
 
         UserEntity loggedUser = securityUtil.getLoggedUser();

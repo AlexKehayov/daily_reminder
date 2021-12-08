@@ -20,6 +20,7 @@ public class RegistrationValidator {
     private final UserRepository userRepository;
 
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
+    private static final String USERNAME_PATTERN = "^[a-zA-Z0-9]([_](?![_])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
 
     public List<ValidationError> validate(UserDTO userDTO) {
         List<ValidationError> errors = new ArrayList<>();
@@ -51,6 +52,12 @@ public class RegistrationValidator {
         } else {
             if(!CollectionUtils.isEmpty(userRepository.findByUsername(userDTO.getUsername()))){
                 errors.add(new ValidationError("username", "Username is already taken"));
+            }
+
+            Pattern pattern = Pattern.compile(USERNAME_PATTERN);
+            Matcher matcher = pattern.matcher(userDTO.getUsername());
+            if (!matcher.matches()){
+                errors.add(new ValidationError("username", "Username must be between 5 and 20 symbols, containing letters, numbers and _"));
             }
         }
 

@@ -2,18 +2,18 @@
 <html lang="en">
 <head th:replace="~{fragments/head :: head_declaration}"></head>
 <body>
-<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/diary2.jpg); background-size:cover" uk-height-viewport>
+<div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/diary2.jpg); background-size:cover" uk-height-viewport th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}">
 
     <nav th:replace="~{fragments/navbar :: nav}"></nav>
 
     <div style="margin-top: 30%" class="uk-child-width-1-2 uk-grid-match" uk-grid>
-        <div class="uk-animation-toggle" tabindex="0">
+        <div class="uk-animation-toggle" tabindex="0" th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}">
             <div class="uk-card uk-card-default uk-card-body uk-animation-slide-bottom">
                 <p class="uk-text-center"><a href="/dailyReminder/diary">Diary</a></p>
             </div>
         </div>
 
-        <div class="uk-animation-toggle" tabindex="0">
+        <div class="uk-animation-toggle" tabindex="0" th:if="${securityUtil.hasRole(securityPermission.USER_READ_ORGANIZER.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_ORGANIZER.getPermission())}">
             <div class="uk-card uk-card-default uk-card-body uk-animation-slide-bottom">
                 <p class="uk-text-center"><a href="/dailyReminder/organizer">Organizer</a></p>
             </div>

@@ -1,5 +1,8 @@
 package com.alex.daily_reminder.daily_reminder.security.service;
 
+import com.alex.daily_reminder.daily_reminder.filter.DiaryRecordFilter;
+import com.alex.daily_reminder.daily_reminder.filter.UserFilter;
+import com.alex.daily_reminder.daily_reminder.model.DiaryRecordEntity;
 import com.alex.daily_reminder.daily_reminder.security.model.ChangeUserDetailsDTO;
 import com.alex.daily_reminder.daily_reminder.security.model.UserDTO;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
@@ -10,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ApplicationUserService implements UserDetailsService {
@@ -44,5 +49,17 @@ public class ApplicationUserService implements UserDetailsService {
 
     public UserEntity findUserByEmail(String email) {
         return applicationUserDao.findByEmail(email);
+    }
+
+    public List<UserEntity> selectUsers(UserFilter filter){
+        return applicationUserDao.selectUsers(filter);
+    }
+
+    public int selectUsersCount(UserFilter filter){
+        return applicationUserDao.selectUsersCount(filter);
+    }
+
+    public void deleteUser(String username){
+        applicationUserDao.deleteUser(username);
     }
 }

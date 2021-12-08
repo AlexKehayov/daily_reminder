@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:fragment="data(users, filter, total)">
+    <div id="fw-users">
+        <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-1-4@s">
+                <label class="uk-form-label" for="user-filter-username">Username</label>
+                <input id="user-filter-username" class="uk-input" type="text" th:value="${filter.username}">
+            </div>
+            <div class="uk-width-1-4@s">
+                <label class="uk-form-label" for="user-filter-first-name">First name</label>
+                <input id="user-filter-first-name" class="uk-input" type="text" th:value="${filter.firstName}">
+            </div>
+            <div class="uk-width-1-4@s">
+                <label class="uk-form-label" for="user-filter-last-name">Last name</label>
+                <input id="user-filter-last-name" class="uk-input" type="text" th:value="${filter.lastName}">
+            </div>
+            <div class="uk-width-1-4@s">
+                <label class="uk-form-label" for="user-filter-email">Email</label>
+                <input id="user-filter-email" class="uk-input" type="text" th:value="${filter.email}">
+            </div>
+        </div>
+
+        <div style="margin-top: 1%">
+            <button style="margin-right: 5px;min-width: 120px; float: right" id="users-filter-clear"
+                    class="uk-button uk-button-grey">Clear
+            </button>
+            <button style="min-width: 120px" id="users-filter-submit"
+                    class="uk-button uk-button-primary">Search
+            </button>
+        </div>
+
+    </div>
+    <div id="tw-users">
+        <div th:replace="~{admin/fragments/userTableContent :: table(users = ${users}, filter = ${filter}, total = ${total})}"></div>
+    </div>
+</div>
+</html>

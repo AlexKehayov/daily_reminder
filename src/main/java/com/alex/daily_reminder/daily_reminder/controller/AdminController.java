@@ -1,15 +1,20 @@
 package com.alex.daily_reminder.daily_reminder.controller;
 
+import com.alex.daily_reminder.daily_reminder.filter.UserFilter;
+import com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
+import com.alex.daily_reminder.daily_reminder.security.service.ApplicationUserService;
+import com.alex.daily_reminder.daily_reminder.util.JsonUtil;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ import java.util.Objects;
 public class AdminController {
 
     private final SecurityUtil securityUtil;
+    private final ApplicationUserService applicationUserService;
 
     @GetMapping
     public String getAdminHome(Model model) {
@@ -27,92 +33,116 @@ public class AdminController {
             model.addAttribute("loggedUser", loggedUser);
         }
 
-//        DiaryRecordFilter diaryRecordFilter = new DiaryRecordFilter();
-//        fillData(model, diaryRecordFilter);
+        UserFilter userFilter = new UserFilter();
+        fillData(model, userFilter);
         return "admin/admin";
     }
 
-//    @PostMapping("/saveEntry")
-//    public String saveDiaryEntry(
-//            @RequestParam String content,
-//            @RequestParam(required = false) Double lat,
-//            @RequestParam(required = false) Double lng,
-//            Model model) {
-//
-//        DiaryRecordEntity diaryRecordEntity = new DiaryRecordEntity();
-//        diaryRecordEntity.setContent(content);
-//        diaryRecordEntity.setCreatedDate(new Date());
-//        diaryRecordEntity.setGeoLat(lat);
-//        diaryRecordEntity.setGeoLng(lng);
-//        diaryRecordEntity.setUserUsername(securityUtil.getLoggedUser().getUsername());
-//
-//        List<ValidationError> errors = diaryEntryValidator.validate(diaryRecordEntity);
-//        if (!CollectionUtils.isEmpty(errors)) {
-//            model.addAttribute("errors", errors);
-//            model.addAttribute("content", content);
-//        } else {
-//            try {
-//                diaryRecordService.saveDiaryEntry(diaryRecordEntity);
-//            } catch (Exception e) {
-//                model.addAttribute("message", "An unexpected error occurred while saving the entry");
-//            }
-//        }
-//
-//        return "diary/fragments/diaryContent :: diaryContent";
-//    }
-//
-//    @PostMapping("/deleteEntry")
-//    @PreAuthorize("hasAuthority('user:write_diary')")
-//    @ResponseBody
-//    public void deleteDiaryEntry(
-//            @RequestParam Integer id) {
-//       diaryRecordService.deleteDiaryEntry(id);
-//    }
-//
-//    @PostMapping("/searchDiary")
-//    @PreAuthorize("hasAuthority('user:read_diary')")
-//    public String searchDiary(
-//            @RequestParam(required = false) String content,
-//            @RequestParam(required = false) String dateFrom,
-//            @RequestParam(required = false) String dateTo,
-//            @RequestParam(required = false) Integer currentPage,
-//            Model model) throws ParseException {
-//
-//        DiaryRecordFilter diaryRecordFilter = new DiaryRecordFilter();
-//
-//        if (StringUtils.hasText(content))
-//            diaryRecordFilter.setContent(content);
-//
-//        if (StringUtils.hasText(dateFrom))
-//            diaryRecordFilter.setCreateDateFrom(new SimpleDateFormat("dd.MM.yy").parse(dateFrom));
-//
-//        if (StringUtils.hasText(dateTo))
-//            diaryRecordFilter.setCreateDateTo(new SimpleDateFormat("dd.MM.yy").parse(dateTo));
-//
-//        if (Objects.nonNull(currentPage))
-//            diaryRecordFilter.setPage(currentPage);
-//
-//        fillData(model, diaryRecordFilter);
-//
-//        return "diary/fragments/diaryTableContent :: table";
-//    }
-//
-//    @PostMapping("/initContentModal")
-//    @PreAuthorize("hasAuthority('user:read_diary')")
-//    public String initContentModal(
-//            @RequestParam String content,
-//            @RequestParam String createdDate,
-//            Model model) throws ParseException {
-//        model.addAttribute("content", content);
-//        model.addAttribute("createdDate", new SimpleDateFormat("yy-MM-dd HH:mm:ss.S").parse(createdDate));
-//        return "diary/modals/viewContent :: view-content";
-//    }
-//
-//    private void fillData(Model model, DiaryRecordFilter filter) {
-//        List<DiaryRecordEntity> diaryRecords = diaryRecordService.selectDiaryRecords(filter);
-//        model.addAttribute("filter", filter);
-//        model.addAttribute("diaryRecords", diaryRecords);
-//        model.addAttribute("total", diaryRecordService.selectDiaryRecordsCount(filter));
-//    }
+    @PostMapping("/saveEntry")
+    @ResponseBody
+    public void saveUserEntry(
+            @RequestParam String username,
+            @RequestParam Boolean diaryRead,
+            @RequestParam Boolean diaryWrite,
+            @RequestParam Boolean organizerRead,
+            @RequestParam Boolean organizerWrite,
+            @RequestParam Boolean isEnabled) {
+
+        UserEntity user = applicationUserService.findUserByUsername(username);
+
+        String grantedAuthorities = user.getGrantedAuthorities();
+        String[] split = grantedAuthorities.split(",");
+        List<String> authorities = Arrays.stream(split).toList();
+        Set<SimpleGrantedAuthority> grantedAuthoritiesSet = new HashSet<>();
+        for (String role : authorities) {
+            grantedAuthoritiesSet.add(new SimpleGrantedAuthority(role));
+        }
+
+        if (diaryRead) {
+            grantedAuthoritiesSet.add(new SimpleGrantedAuthority(SecurityPermission.USER_READ_DIARY.getPermission()));
+        } else {
+            grantedAuthoritiesSet.remove(new SimpleGrantedAuthority(SecurityPermission.USER_READ_DIARY.getPermission()));
+        }
+
+        if (diaryWrite) {
+            grantedAuthoritiesSet.add(new SimpleGrantedAuthority(SecurityPermission.USER_WRITE_DIARY.getPermission()));
+        } else {
+            grantedAuthoritiesSet.remove(new SimpleGrantedAuthority(SecurityPermission.USER_WRITE_DIARY.getPermission()));
+        }
+
+        if (organizerRead) {
+            grantedAuthoritiesSet.add(new SimpleGrantedAuthority(SecurityPermission.USER_READ_ORGANIZER.getPermission()));
+        } else {
+            grantedAuthoritiesSet.remove(new SimpleGrantedAuthority(SecurityPermission.USER_READ_ORGANIZER.getPermission()));
+        }
+
+        if (organizerWrite) {
+            grantedAuthoritiesSet.add(new SimpleGrantedAuthority(SecurityPermission.USER_WRITE_ORGANIZER.getPermission()));
+        } else {
+            grantedAuthoritiesSet.remove(new SimpleGrantedAuthority(SecurityPermission.USER_WRITE_ORGANIZER.getPermission()));
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (SimpleGrantedAuthority sga : grantedAuthoritiesSet.stream().toList()){
+            sb.append(sga.getAuthority());
+            sb.append(",");
+        }
+        user.setGrantedAuthorities(sb.substring(0, sb.toString().length()-1));
+        user.setEnabled(isEnabled);
+        applicationUserService.saveUserEntity(user);
+    }
+
+    @PostMapping("/deleteEntry")
+    @ResponseBody
+    public void deleteDiaryEntry(
+            @RequestParam String username) {
+        applicationUserService.deleteUser(username);
+    }
+
+    @PostMapping("/searchUsers")
+    public String searchUsers(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) Integer currentPage,
+            Model model) {
+
+        UserFilter filter = new UserFilter();
+
+        if (StringUtils.hasText(username))
+            filter.setUsername(username);
+
+        if (StringUtils.hasText(firstName))
+            filter.setFirstName(firstName);
+
+        if (StringUtils.hasText(lastName))
+            filter.setLastName(lastName);
+
+        if (StringUtils.hasText(email))
+            filter.setEmail(email);
+
+        if (Objects.nonNull(currentPage))
+            filter.setPage(currentPage);
+
+        fillData(model, filter);
+
+        return "admin/fragments/userTableContent.html :: table";
+    }
+
+    @PostMapping("/initConfigureModal")
+    public String initContentModal(
+            @RequestParam String username,
+            Model model) {
+        model.addAttribute("user", applicationUserService.findUserByUsername(username));
+        return "admin/modals/configure :: configure";
+    }
+
+    private void fillData(Model model, UserFilter filter) {
+        List<UserEntity> users = applicationUserService.selectUsers(filter);
+        model.addAttribute("filter", filter);
+        model.addAttribute("users", users);
+        model.addAttribute("total", applicationUserService.selectUsersCount(filter));
+    }
 
 }

@@ -1,11 +1,13 @@
 package com.alex.daily_reminder.daily_reminder.security.service;
 
+import com.alex.daily_reminder.daily_reminder.filter.UserFilter;
 import com.alex.daily_reminder.daily_reminder.security.mapper.UserMapper;
 import com.alex.daily_reminder.daily_reminder.security.model.ApplicationUser;
 import com.alex.daily_reminder.daily_reminder.security.model.ChangeUserDetailsDTO;
 import com.alex.daily_reminder.daily_reminder.security.model.UserDTO;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.security.repository.UserRepository;
+import com.alex.daily_reminder.daily_reminder.security.repository.UserRepositoryCustom;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,14 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserRepositoryCustom userRepositoryCustom;
     private final UserMapper userMapper;
 
     @Autowired
-    public FakeApplicationUserDaoService(PasswordEncoder passwordEncoder, UserRepository userRepository, UserMapper userMapper) {
+    public FakeApplicationUserDaoService(PasswordEncoder passwordEncoder, UserRepository userRepository, UserRepositoryCustom userRepositoryCustom, UserMapper userMapper) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.userRepositoryCustom = userRepositoryCustom;
         this.userMapper = userMapper;
     }
 
@@ -98,5 +102,20 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
     public UserEntity findByEmail(String email) {
         List<UserEntity> users = userRepository.findByEmail(email);
         return users.isEmpty()? null : users.get(0);
+    }
+
+    @Override
+    public List<UserEntity> selectUsers(UserFilter filter) {
+        return userRepositoryCustom.selectUserEntries(filter);
+    }
+
+    @Override
+    public int selectUsersCount(UserFilter filter) {
+        return userRepositoryCustom.selectUserEntriesCount(filter);
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        userRepository.deleteById(username);
     }
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="uk-modal-dialog uk-modal-body" style="width: 80%; height: auto"
+     th:fragment="configure(user)" th:with="securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <h2 class="uk-modal-title"><span th:text="${user.username + ' - ' + user.firstName + ' ' + user.lastName}"></span></h2>
+
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-2@s">
+            <div style="width: 60%; display: inline-block; font-size: 20px">Read diary permission</div>
+            <label class="uk-switch" for="diary-read" style="margin: 0 0 -3% 0">
+                <input type="checkbox" id="diary-read" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_READ_DIARY.getPermission())}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+        <div class="uk-width-1-2@s">
+            <div style="width: 60%; display: inline-block; font-size: 20px">Write diary permission</div>
+            <label class="uk-switch" for="diary-write" style="margin: 0 0 -3% 0">
+                <input type="checkbox" id="diary-write" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_WRITE_DIARY.getPermission())}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+    </div>
+
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-2@s">
+            <div style="width: 60%; display: inline-block; font-size: 20px">Read organizer permission</div>
+            <label class="uk-switch" for="organizer-read" style="margin: 0 0 -3% 0">
+                <input type="checkbox" id="organizer-read" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_READ_ORGANIZER.getPermission())}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+        <div class="uk-width-1-2@s">
+            <div style="width: 60%; display: inline-block; font-size: 20px">Write organizer permission</div>
+            <label class="uk-switch" for="organizer-write" style="margin: 0 0 -3% 0">
+                <input type="checkbox" id="organizer-write" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_WRITE_ORGANIZER.getPermission())}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+    </div>
+
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-2@s">
+            <div style="width: 60%; display: inline-block; font-size: 20px">Enabled account</div>
+            <label class="uk-switch" for="user-enabled" style="margin: 0 0 -3% 0">
+                <input type="checkbox" id="user-enabled" th:checked="${user.isEnabled}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+    </div>
+
+    <button style="float: right" id="save-user-entry" class="uk-button uk-button-primary" th:data-username="${user.username}">Save</button>
+
+</div>
+</html>

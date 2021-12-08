@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:remove="tag" th:fragment="table(users, filter, total)">
+
+    <div th:if="${!#lists.isEmpty(users)}" style="margin-top: 1%">
+        <div>
+            <div>
+                <span>Total: </span>
+                <span th:text="${total}"></span>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <div>
+                <table class="uk-table uk-table-striped uk-table-small">
+                    <thead>
+                    <tr>
+                        <th style="width: 30%">Username</th>
+                        <th style="width: 30%">Name</th>
+                        <th style="width: 30%">Email</th>
+                        <th style="width: 10%">Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item,itemStat : ${users}">
+                        <td th:text="${item.username}"></td>
+                        <td th:text="${item.firstName + ' ' + item.lastName}"></td>
+                        <td th:text="${item.email}"></td>
+                        <td class="options text-center">
+                            <a class="user-configure" th:data-username="${item.username}">
+                                <span uk-icon="icon: cog"></span>
+                            </a>
+                            <a th:uk-toggle="'target: #user-delete-' + ${item.username}" >
+                                <span uk-icon="icon: trash"></span>
+                            </a>
+                            <div th:id="'user-delete-' + ${item.username}" uk-modal>
+                                <div class="uk-modal-dialog uk-modal-body">
+                                    <h2 class="uk-modal-title"> Confirm deletion?</h2>
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button">No</button>
+                                    <button class="delete-user-entry uk-button uk-button-primary uk-modal-close" th:data-username="${item.username}" type="button">Yes</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="paginator">
+                    <input type="hidden" id="currentPage" th:value="${filter.page}">
+                    <ul class="uk-pagination uk-flex-center" uk-margin>
+                        <li th:if="${filter.page > 1}" class="users-prev-page"><a><span uk-pagination-previous></span></a></li>
+                        <li th:each="i: ${#numbers.sequence(1, (total%filter.pageSize == 0 ? (total/filter.pageSize) : (total/filter.pageSize + 1)))}" th:value="${i}" th:class="${filter.page == i ? 'users-page uk-active':'users-page'}"><a><span th:style="${filter.page == i ? 'color: red':''}" th:text="${i}"></span></a></li>
+                        <li th:if="${filter.page < (total%filter.pageSize == 0 ? (total/filter.pageSize) : (total/filter.pageSize + 1))}" class="users-next-page"><a><span uk-pagination-next></span></a></li>
+                    </ul>
+                </div>
+                <div id="modal-configure" uk-modal></div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
