@@ -12,6 +12,9 @@
                 <spring.datasource.username>root</spring.datasource.username>
                 <spring.datasource.password>root</spring.datasource.password>
 
+                <email.username>carlex2021bg@gmail.com</email.username>
+                <email.password>carlex-diplomna-rabota-2021</email.password>
+
                 <spring.jpa.properties.hibernate.dialect>org.hibernate.dialect.MySQL8Dialect</spring.jpa.properties.hibernate.dialect>
             </properties>
             <activation>
