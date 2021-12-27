@@ -4,12 +4,12 @@
 <body>
 <div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade"
      style="background-image: url(images/adminPage.jpg); background-size:cover" uk-height-viewport>
-    <nav th:replace="~{fragments/navbar :: nav}"></nav>
+    <nav th:replace="~{fragments/navbar :: nav(locale = ${#locale.toString()})}"></nav>
 
     <div uk-alert>
         <ul uk-accordion>
             <li>
-                <a class="uk-accordion-title" href="#">Search users</a>
+                <a class="uk-accordion-title" href="#" th:text="#{t.searchUsers}"></a>
                 <div class="uk-accordion-content">
                     <div th:replace="~{admin/fragments/usersTable :: data(users = ${users}, filter = ${filter}, total = ${total})}"></div>
                 </div>

@@ -9,12 +9,12 @@
             <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
                 <div class="uk-width-1-1@m">
                     <div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
-                        <h3 class="uk-card-title uk-text-center">Registration form</h3>
+                        <h3 class="uk-card-title uk-text-center" th:text="#{t.registrationForm}"></h3>
                         <form>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                    <input th:field="*{firstName}" placeholder="First name" class="uk-input uk-form-large form-control" type="text">
+                                    <input th:field="*{firstName}" th:placeholder="#{l.firstName}" class="uk-input uk-form-large form-control" type="text">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('firstName')}" style="color: red"
@@ -24,7 +24,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                    <input th:field="*{lastName}" placeholder="Last name" class="uk-input uk-form-large form-control" type="text">
+                                    <input th:field="*{lastName}" th:placeholder="#{l.lastName}" class="uk-input uk-form-large form-control" type="text">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('lastName')}" style="color: red"
@@ -34,7 +34,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                                    <input th:field="*{email}" placeholder="Email" class="uk-input uk-form-large form-control" type="email">
+                                    <input th:field="*{email}" th:placeholder="#{l.email}" class="uk-input uk-form-large form-control" type="email">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('email')}" style="color: red"
@@ -44,7 +44,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                    <input th:field="*{username}" placeholder="Username" class="uk-input uk-form-large form-control" type="text">
+                                    <input th:field="*{username}" th:placeholder="#{l.username}" class="uk-input uk-form-large form-control" type="text">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('username')}" style="color: red"
@@ -54,7 +54,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                    <input th:field="*{password}" placeholder="Password" class="uk-input uk-form-large form-control" type="password">
+                                    <input th:field="*{password}" th:placeholder="#{l.password}" class="uk-input uk-form-large form-control" type="password">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('password')}" style="color: red"
@@ -64,7 +64,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                    <input th:field="*{matchingPassword}" placeholder="Repeat password" class="uk-input uk-form-large form-control" type="password">
+                                    <input th:field="*{matchingPassword}" th:placeholder="#{l.repeatNewPassword}" class="uk-input uk-form-large form-control" type="password">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('matchingPassword')}" style="color: red"
@@ -72,7 +72,7 @@
                                 </th:block>
                             </div>
                             <div class="uk-margin">
-                                <button type="submit" class="uk-button uk-button-primary uk-button-large uk-width-1-1">Register</button>
+                                <button type="submit" class="uk-button uk-button-primary uk-button-large uk-width-1-1" th:text="#{b.register}"></button>
                             </div>
                         </form>
                     </div>

@@ -8,7 +8,7 @@
 
     <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-1@s">
-            <label class="uk-form-label" for="organizer-title">Title</label>
+            <label class="uk-form-label" for="organizer-title" th:text="#{l.title}"></label>
             <input id="organizer-title" class="uk-input" type="text" th:value="${organizerEntry?.title}">
             <th:block th:each="error : ${errors}">
                 <p th:if="${error.pointer.equals('title')}" style="color: red"
@@ -19,7 +19,7 @@
 
     <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-1@s">
-            <label class="uk-form-label" for="organizer-content">Content</label>
+            <label class="uk-form-label" for="organizer-content" th:text="#{l.content}"></label>
             <textarea id="organizer-content" class="uk-textarea" th:value="${organizerEntry?.title}"></textarea>
             <th:block th:each="error : ${errors}">
                 <p th:if="${error.pointer.equals('content')}" style="color: red"
@@ -30,7 +30,7 @@
 
     <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-4@s">
-            <label class="uk-form-label" for="organizer-from-date">From date</label>
+            <label class="uk-form-label" for="organizer-from-date" th:text="#{l.dateFrom}"></label>
             <input th:disabled="${organizerEntry.isFixedDate}" class="uk-input" id="organizer-from-date" type="text"
                    th:value="${#dates.format(organizerEntry?.fromDate,'dd.MM.yyyy')}">
             <th:block th:each="error : ${errors}">
@@ -39,7 +39,7 @@
             </th:block>
         </div>
         <div class="uk-width-1-4@s">
-            <label class="uk-form-label" for="organizer-to-date">To date</label>
+            <label class="uk-form-label" for="organizer-to-date" th:text="#{l.dateTo}"></label>
             <input th:disabled="${organizerEntry.isFixedDate}" class="uk-input" id="organizer-to-date" type="text"
                    th:value="${#dates.format(organizerEntry?.toDate,'dd.MM.yyyy')}">
             <th:block th:each="error : ${errors}">
@@ -54,7 +54,7 @@
             </label>
         </div>
         <div class="uk-width-1-4@s">
-            <label class="uk-form-label" for="organizer-fixed-date">Fixed date</label>
+            <label class="uk-form-label" for="organizer-fixed-date" th:text="#{l.fixedDate}"></label>
             <input th:disabled="${!organizerEntry.isFixedDate}" class="uk-input" id="organizer-fixed-date" type="text"
                    th:value="${#dates.format(organizerEntry?.fixedDate,'dd.MM.yyyy')}">
             <th:block th:each="error : ${errors}">
@@ -66,7 +66,7 @@
 
     <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-4@s uk-autocomplete">
-            <label class="uk-form-label" for="organizer-from-time">From time</label>
+            <label class="uk-form-label" for="organizer-from-time" th:text="#{l.timeFrom}"></label>
             <input th:disabled="${organizerEntry.isFixedTime}" class="uk-input" id="organizer-from-time" type="text" data-uk-timepicker
                    th:value="${#temporals.format(organizerEntry?.fromTime,'HH:mm')}">
             <th:block th:each="error : ${errors}">
@@ -75,7 +75,7 @@
             </th:block>
         </div>
         <div class="uk-width-1-4@s uk-autocomplete">
-            <label class="uk-form-label" for="organizer-to-time">To time</label>
+            <label class="uk-form-label" for="organizer-to-time" th:text="#{l.timeTo}"></label>
             <input th:disabled="${organizerEntry.isFixedTime}" class="uk-input" id="organizer-to-time" type="text" data-uk-timepicker
                    th:value="${#temporals.format(organizerEntry?.toTime,'HH:mm')}">
             <th:block th:each="error : ${errors}">
@@ -90,7 +90,7 @@
             </label>
         </div>
         <div class="uk-width-1-4@s">
-            <label class="uk-form-label" for="organizer-fixed-time">Fixed time</label>
+            <label class="uk-form-label" for="organizer-fixed-time" th:text="#{l.fixedTime}"></label>
             <input th:disabled="${!organizerEntry.isFixedTime}" class="uk-input" id="organizer-fixed-time" type="text" data-uk-timepicker
                    th:value="${#temporals.format(organizerEntry?.fixedTime,'HH:mm')}">
             <th:block th:each="error : ${errors}">
@@ -102,7 +102,7 @@
 
     <div class="uk-grid-small" uk-grid style="margin-bottom: 1%">
         <div class="uk-width-1-1@s">
-            <label class="uk-form-label" for="organizer-geo-place">Place</label>
+            <label class="uk-form-label" for="organizer-geo-place" th:text="#{l.place}"></label>
             <input class="uk-input uk-autocomplete" id="organizer-geo-place" type="text"
                    th:value="${organizerEntry?.geoPlace}">
             <div uk-dropdown="mode: click" id="places-autocomplete">
@@ -118,7 +118,7 @@
             <input type="hidden" id="organizer-geo-lng" th:value="${organizerEntry?.geoLng}">
         </div>
     </div>
-    <button id="save-organizer-entry" class="uk-button uk-button-primary">Save</button>
+    <button id="save-organizer-entry" class="uk-button uk-button-primary" th:text="#{b.save}"></button>
     <input type="hidden" id="errors" th:value="${errors}">
     <script>
         $("#organizer-from-date").datepicker(

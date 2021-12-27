@@ -9,12 +9,12 @@
             <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
                 <div class="uk-width-1-1@m">
                     <div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
-                        <h3 class="uk-card-title uk-text-center">Change user details form</h3>
+                        <h3 class="uk-card-title uk-text-center" th:text="#{t.changeUserDetailsForm}"></h3>
                         <form>
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                                    <input th:field="*{email}" placeholder="Email" class="uk-input uk-form-large form-control" type="email">
+                                    <input th:field="*{email}" th:placeholder="#{l.email}" class="uk-input uk-form-large form-control" type="email">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('email')}" style="color: red"
@@ -24,7 +24,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                    <input th:field="*{oldPassword}" placeholder="Old password" class="uk-input uk-form-large form-control" type="password">
+                                    <input th:field="*{oldPassword}" th:placeholder="#{l.oldPassword}" class="uk-input uk-form-large form-control" type="password">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('oldPassword')}" style="color: red"
@@ -34,7 +34,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                    <input th:field="*{newPassword}" placeholder="New password" class="uk-input uk-form-large form-control" type="password">
+                                    <input th:field="*{newPassword}" th:placeholder="#{l.newPassword}" class="uk-input uk-form-large form-control" type="password">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('newPassword')}" style="color: red"
@@ -44,7 +44,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                    <input th:field="*{matchingNewPassword}" placeholder="Repeat new password" class="uk-input uk-form-large form-control" type="password">
+                                    <input th:field="*{matchingNewPassword}" th:placeholder="#{l.repeatNewPassword}" class="uk-input uk-form-large form-control" type="password">
                                 </div>
                                 <th:block th:each="error : ${errors}">
                                     <p th:if="${error.pointer.equals('matchingNewPassword')}" style="color: red"
@@ -52,7 +52,7 @@
                                 </th:block>
                             </div>
                             <div class="uk-margin">
-                                <button type="submit" class="uk-button uk-button-primary uk-button-large uk-width-1-1">Update</button>
+                                <button type="submit" class="uk-button uk-button-primary uk-button-large uk-width-1-1" th:text="#{b.update}"></button>
                             </div>
                         </form>
                     </div>

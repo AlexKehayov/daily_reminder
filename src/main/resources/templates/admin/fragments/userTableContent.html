@@ -15,10 +15,10 @@
                 <table class="uk-table uk-table-striped uk-table-small">
                     <thead>
                     <tr>
-                        <th style="width: 30%">Username</th>
-                        <th style="width: 30%">Name</th>
-                        <th style="width: 30%">Email</th>
-                        <th style="width: 10%">Options</th>
+                        <th style="width: 30%" th:text="#{l.username}"></th>
+                        <th style="width: 30%" th:text="#{l.name}"></th>
+                        <th style="width: 30%" th:text="#{l.email}"></th>
+                        <th style="width: 10%" th:text="#{l.options}"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -35,9 +35,9 @@
                             </a>
                             <div th:id="'user-delete-' + ${item.username}" uk-modal>
                                 <div class="uk-modal-dialog uk-modal-body">
-                                    <h2 class="uk-modal-title"> Confirm deletion?</h2>
-                                    <button class="uk-button uk-button-default uk-modal-close" type="button">No</button>
-                                    <button class="delete-user-entry uk-button uk-button-primary uk-modal-close" th:data-username="${item.username}" type="button">Yes</button>
+                                    <h2 class="uk-modal-title" th:text="' ' + #{p.confirmDeletion}"></h2>
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{b.no}"></button>
+                                    <button class="delete-user-entry uk-button uk-button-primary uk-modal-close" th:data-username="${item.username}" type="button" th:text="#{b.yes}"></button>
                                 </div>
                             </div>
                         </td>

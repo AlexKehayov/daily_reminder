@@ -4,18 +4,18 @@
 <body>
 <div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade"
      style="background-image: url(images/pen.jpg); background-size:cover" uk-height-viewport th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}">
-    <nav th:replace="~{fragments/navbar :: nav}"></nav>
+    <nav th:replace="~{fragments/navbar :: nav(locale = ${#locale.toString()})}"></nav>
 
     <div uk-alert>
         <ul uk-accordion>
             <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission())}">
-                <a class="uk-accordion-title" href="#">Search entries</a>
+                <a class="uk-accordion-title" href="#" th:text="#{t.searchEntries}"></a>
                 <div class="uk-accordion-content">
                     <div th:replace="~{diary/fragments/diaryTable :: data(diaryRecords = ${diaryRecords}, filter = ${filter}, total = ${total})}"></div>
                 </div>
             </li>
             <li id="create-diary-entry-li" th:if="${securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}">
-                <a class="uk-accordion-title" href="#">Create new entry</a>
+                <a class="uk-accordion-title" href="#" th:text="#{t.createNewEntry}"></a>
                 <div class="uk-accordion-content" id="diary-content-container">
                     <div th:replace="~{diary/fragments/diaryContent :: diaryContent(content = null, errors = null, message = null)}"></div>
                 </div>

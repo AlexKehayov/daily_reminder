@@ -5,23 +5,23 @@
 <div class="uk-section uk-section-muted uk-flex-middle uk-animation-fade" style="background-image: url(images/diary1.jpg); background-size:cover" uk-height-viewport>
 
     <div style="text-align: center; margin-top: 10%">
-        <span class="uk-text-lead">Welcome to Daily Reminder</span>
+        <span class="uk-text-lead" th:text="#{l.welcome}"></span>
     </div>
 
     <div style="text-align: center; margin-bottom: 20%">
-        <span>Your personal web diary and organizer</span>
+        <span th:text="#{l.welcome.description}"></span>
     </div>
 
     <div class="uk-child-width-1-2 uk-grid-match" uk-grid>
     <div class="uk-animation-toggle" tabindex="0">
         <div class="uk-card uk-card-default uk-card-body uk-animation-slide-left">
-            <p class="uk-text-center"><a href="/dailyReminder/login">Login</a></p>
+            <p class="uk-text-center"><a href="/dailyReminder/login" th:text="#{b.login}"></a></p>
         </div>
     </div>
 
     <div class="uk-animation-toggle" tabindex="0">
         <div class="uk-card uk-card-default uk-card-body uk-animation-slide-right">
-            <p class="uk-text-center"><a href="/dailyReminder/registrationForm">Register</a></p>
+            <p class="uk-text-center"><a href="/dailyReminder/registrationForm" th:text="#{b.register}"></a></p>
         </div>
     </div>
     </div>

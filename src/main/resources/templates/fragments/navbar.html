@@ -1,26 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<nav th:fragment="nav" th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}" class="uk-navbar-container" uk-navbar style="margin-top: -70px">
+<nav th:fragment="nav(locale)" th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}" class="uk-navbar-container" uk-navbar style="margin-top: -70px">
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
-            <li><span th:text="${'  Welcome to Daily Reminder, ' + loggedUser.getFirstName() + ' ' + loggedUser.getLastName()}"></span></li>
+            <li><div style="margin-left: 10px" th:text="#{l.welcome} + ${', ' + loggedUser.getFirstName() + ' ' + loggedUser.getLastName()}"></div></li>
         </ul>
     </div>
     <div class="uk-navbar-right">
         <ul class="uk-navbar-nav">
             <li>
-                <a href="#">Options</a>
+                <a href="#" th:text="#{l.options}"></a>
                 <div class="uk-navbar-dropdown">
                     <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a href="/dailyReminder/home">Home</a></li>
-                        <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}"><a href="/dailyReminder/diary">Diary</a></li>
-                        <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_ORGANIZER.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_ORGANIZER.getPermission())}"><a href="/dailyReminder/organizer">Organizer</a></li>
-                        <li><a href="/dailyReminder/changeUserDetailsForm">Change user details</a></li>
+                        <li><a href="/dailyReminder/home" th:text="#{l.home}"></a></li>
+                        <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}"><a href="/dailyReminder/diary" th:text="#{l.diary}"></a></li>
+                        <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_ORGANIZER.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_ORGANIZER.getPermission())}"><a href="/dailyReminder/organizer" th:text="#{l.organizer}"></a></li>
+                        <li><a href="/dailyReminder/changeUserDetailsForm" th:text="#{l.changeUserDetails}"></a></li>
                     </ul>
                 </div>
             </li>
-            <li th:if="${securityUtil.hasRole('ROLE_ADMIN')}"><a href="/dailyReminder/admin">Admin console</a></li>
-            <li><a href="/dailyReminder/logout">Logout</a></li>
+            <li th:if="${securityUtil.hasRole('ROLE_ADMIN')}"><a href="/dailyReminder/admin" th:text="#{l.adminConsole}"></a></li>
+            <li><a href="/dailyReminder/logout" th:text="#{l.logout}"></a></li>
+
+            <li>
+                <a href="#"><span th:text="${locale == 'bg'} ? 'Език' : 'Language'"></span></a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li th:class="${locale == 'bg' ? 'uk-active' : ''}">
+                            <a class="header-menu-option-text" th:href="@{/(lang='bg')}">
+                                <span>Български</span>
+                            </a>
+                        </li>
+                        <li th:class="${locale == 'en' ? 'uk-active' : ''}">
+                            <a class="header-menu-option-text" th:href="@{/(lang='en')}">
+                                <span>English</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>

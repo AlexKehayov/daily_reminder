@@ -5,7 +5,7 @@
     <div th:if="${!#lists.isEmpty(organizerRecords)}" style="margin-top: 1%">
         <div>
             <div>
-                <span>Total: </span>
+                <span th:text="#{l.total} + ' '"></span>
                 <span th:text="${total}"></span>
             </div>
         </div>
@@ -15,9 +15,9 @@
                 <table class="uk-table uk-table-striped uk-table-small">
                     <thead>
                     <tr>
-                        <th style="width: 20%">Date</th>
-                        <th>Title</th>
-                        <th style="width: 10%">Options</th>
+                        <th style="width: 20%" th:text="#{l.date}"></th>
+                        <th th:text="#{l.title}"></th>
+                        <th style="width: 10%" th:text="#{l.options}"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -36,9 +36,9 @@
                             </a>
                             <div th:id="'organizer-delete-' + ${item.id}" uk-modal>
                                 <div class="uk-modal-dialog uk-modal-body">
-                                    <h2 class="uk-modal-title"> Confirm deletion?</h2>
-                                    <button class="uk-button uk-button-default uk-modal-close" type="button">No</button>
-                                    <button class="delete-organizer-entry uk-button uk-button-primary uk-modal-close" th:data-id="${item.id}" type="button">Yes</button>
+                                    <h2 class="uk-modal-title" th:text="' ' + #{p.confirmDeletion}"></h2>
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{b.no}"></button>
+                                    <button class="delete-organizer-entry uk-button uk-button-primary uk-modal-close" th:data-id="${item.id}" type="button" th:text="#{b.yes}"></button>
                                 </div>
                             </div>
                         </td>

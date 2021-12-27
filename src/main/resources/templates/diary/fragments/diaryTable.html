@@ -4,27 +4,27 @@
     <div id="fw-diaryRecords">
         <div class="uk-grid-small" uk-grid>
             <div class="uk-width-1-2@s">
-                <label class="uk-form-label" for="diary-filter-date-from">Content</label>
+                <label class="uk-form-label" for="diary-filter-date-from" th:text="#{l.content}"></label>
                 <input id="diary-filter-content" class="uk-input" type="text" th:value="${filter.content}">
             </div>
             <div class="uk-width-1-4@s">
-                <label class="uk-form-label" for="diary-filter-date-from">Date from</label>
-                <input class="uk-input" id="diary-filter-date-from" type="text"
+                <label class="uk-form-label" for="diary-filter-date-from" th:text="#{l.dateFrom}"></label>
+                <input class="uk-input" id="diary-filter-date-from" type="text" autocomplete="off"
                        th:value="${#dates.format(filter.createDateFrom,'dd.MM.yyyy')}">
             </div>
             <div class="uk-width-1-4@s">
-                <label class="uk-form-label" for="diary-filter-date-to">Date to</label>
-                <input class="uk-input" id="diary-filter-date-to" type="text"
+                <label class="uk-form-label" for="diary-filter-date-to" th:text="#{l.dateTo}"></label>
+                <input class="uk-input" id="diary-filter-date-to" type="text" autocomplete="off"
                        th:value="${#dates.format(filter.createDateTo,'dd.MM.yyyy')}">
             </div>
         </div>
 
         <div style="margin-top: 1%">
             <button style="margin-right: 5px;min-width: 120px; float: right" id="diaryRecords-filter-clear"
-                    class="uk-button uk-button-grey">Clear
+                    class="uk-button uk-button-grey" th:text="#{b.clear}">
             </button>
             <button style="min-width: 120px" id="diaryRecords-filter-submit"
-                    class="uk-button uk-button-primary">Search
+                    class="uk-button uk-button-primary" th:text="#{b.search}">
             </button>
         </div>
 

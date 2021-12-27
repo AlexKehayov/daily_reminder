@@ -7,14 +7,14 @@
 
     <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-2@s">
-            <div style="width: 60%; display: inline-block; font-size: 20px">Read diary permission</div>
+            <div style="width: 60%; display: inline-block; font-size: 20px" th:text="#{l.readDiaryPermission}"></div>
             <label class="uk-switch" for="diary-read" style="margin: 0 0 -3% 0">
                 <input type="checkbox" id="diary-read" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_READ_DIARY.getPermission())}">
                 <div class="uk-switch-slider"></div>
             </label>
         </div>
         <div class="uk-width-1-2@s">
-            <div style="width: 60%; display: inline-block; font-size: 20px">Write diary permission</div>
+            <div style="width: 60%; display: inline-block; font-size: 20px" th:text="#{l.writeDiaryPermission}"></div>
             <label class="uk-switch" for="diary-write" style="margin: 0 0 -3% 0">
                 <input type="checkbox" id="diary-write" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_WRITE_DIARY.getPermission())}">
                 <div class="uk-switch-slider"></div>
@@ -24,14 +24,14 @@
 
     <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-2@s">
-            <div style="width: 60%; display: inline-block; font-size: 20px">Read organizer permission</div>
+            <div style="width: 60%; display: inline-block; font-size: 20px" th:text="#{l.readOrganizerPermission}"></div>
             <label class="uk-switch" for="organizer-read" style="margin: 0 0 -3% 0">
                 <input type="checkbox" id="organizer-read" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_READ_ORGANIZER.getPermission())}">
                 <div class="uk-switch-slider"></div>
             </label>
         </div>
         <div class="uk-width-1-2@s">
-            <div style="width: 60%; display: inline-block; font-size: 20px">Write organizer permission</div>
+            <div style="width: 60%; display: inline-block; font-size: 20px" th:text="#{l.writeOrganizerPermission}"></div>
             <label class="uk-switch" for="organizer-write" style="margin: 0 0 -3% 0">
                 <input type="checkbox" id="organizer-write" th:checked="${#strings.contains(user.grantedAuthorities, securityPermission.USER_WRITE_ORGANIZER.getPermission())}">
                 <div class="uk-switch-slider"></div>
@@ -41,7 +41,7 @@
 
     <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-2@s">
-            <div style="width: 60%; display: inline-block; font-size: 20px">Enabled account</div>
+            <div style="width: 60%; display: inline-block; font-size: 20px" th:text="#{l.enabledAccount}"></div>
             <label class="uk-switch" for="user-enabled" style="margin: 0 0 -3% 0">
                 <input type="checkbox" id="user-enabled" th:checked="${user.isEnabled}">
                 <div class="uk-switch-slider"></div>
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <button style="float: right" id="save-user-entry" class="uk-button uk-button-primary" th:data-username="${user.username}">Save</button>
+    <button style="float: right" id="save-user-entry" class="uk-button uk-button-primary" th:data-username="${user.username}" th:text="#{b.save}"></button>
 
 </div>
 </html>

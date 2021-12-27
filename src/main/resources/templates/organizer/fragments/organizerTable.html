@@ -4,33 +4,33 @@
     <div id="fw-organizerRecords">
         <div class="uk-grid-small" uk-grid>
             <div class="uk-width-1-2@s">
-                <label class="uk-form-label" for="organizer-filter-title">Title</label>
+                <label class="uk-form-label" for="organizer-filter-title" th:text="#{l.title}"></label>
                 <input id="organizer-filter-title" class="uk-input" type="text" th:value="${filter.title}">
             </div>
             <div class="uk-width-1-2@s">
-                <label class="uk-form-label" for="organizer-filter-content">Content</label>
+                <label class="uk-form-label" for="organizer-filter-content" th:text="#{l.content}"></label>
                 <input id="organizer-filter-content" class="uk-input" type="text" th:value="${filter.content}">
             </div>
         </div>
         <div class="uk-grid-small" uk-grid>
             <div class="uk-width-1-2@s">
-                <label class="uk-form-label" for="organizer-filter-from-date">Date from</label>
-                <input class="uk-input" id="organizer-filter-from-date" type="text"
+                <label class="uk-form-label" for="organizer-filter-from-date" th:text="#{l.dateFrom}"></label>
+                <input class="uk-input" id="organizer-filter-from-date" type="text" autocomplete="off"
                        th:value="${#dates.format(filter.fromDate,'dd.MM.yyyy')}">
             </div>
             <div class="uk-width-1-2@s">
-                <label class="uk-form-label" for="organizer-filter-to-date">Date to</label>
-                <input class="uk-input" id="organizer-filter-to-date" type="text"
+                <label class="uk-form-label" for="organizer-filter-to-date" th:text="#{l.dateTo}"></label>
+                <input class="uk-input" id="organizer-filter-to-date" type="text" autocomplete="off"
                        th:value="${#dates.format(filter.toDate,'dd.MM.yyyy')}">
             </div>
         </div>
 
         <div style="margin-top: 1%">
             <button style="margin-right: 5px;min-width: 120px; float: right" id="organizerRecords-filter-clear"
-                    class="uk-button uk-button-grey">Clear
+                    class="uk-button uk-button-grey" th:text="#{b.clear}">
             </button>
             <button style="min-width: 120px" id="organizerRecords-filter-submit"
-                    class="uk-button uk-button-primary">Search
+                    class="uk-button uk-button-primary" th:text="#{b.search}">
             </button>
         </div>
 
