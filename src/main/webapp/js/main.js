@@ -72,17 +72,26 @@ $(document).ready(function () {
 //DIARY
 $(document).on("click", "#save-diary-entry", function (e) {
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            saveDiaryEntry(position.coords.latitude, position.coords.longitude);
-        });
+    let val = $("#diary-is-not-current-location").is(":checked");
+
+    if(!val){
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                saveDiaryEntry(position.coords.latitude, position.coords.longitude, null);
+            });
+        } else {
+            saveDiaryEntry(null, null, null);
+        }
     } else {
-        saveDiaryEntry(null, null);
+        let lat = $("#diary-geo-lat").val();
+        let lng = $("#diary-geo-lng").val();
+        let place = $("#diary-geo-place").val();
+        saveDiaryEntry(lat, lng, place);
     }
 
 });
 
-function saveDiaryEntry(lat, lng) {
+function saveDiaryEntry(lat, lng, place) {
     let content = $('#diary-content').val();
 
     $.ajax({
@@ -91,7 +100,8 @@ function saveDiaryEntry(lat, lng) {
         data: {
             content: content,
             lat: lat,
-            lng: lng
+            lng: lng,
+            place: place
         },
         success: function (result) {
             $('#diary-content-container').html(result);
@@ -423,7 +433,7 @@ $(document).on("change", "#organizer-is-fixed-time", function (e) {
     }
 });
 
-$(document).on("input", "#organizer-geo-place", function (e) {
+$(document).on("input", ".geo-place", function (e) {
     let name = $(this).val();
     $.ajax({
         url: '/dailyReminder/organizer/locationsAutoComplete',
@@ -444,9 +454,9 @@ $(document).on("click", ".place-option", function (e) {
     let locationName = $(this).attr('data-locationName');
     let lat = $(this).attr('data-lat');
     let lng = $(this).attr('data-lng');
-    $('#organizer-geo-place').val(locationName);
-    $('#organizer-geo-lat').val(lat);
-    $('#organizer-geo-lng').val(lng);
+    $('.geo-place').val(locationName);
+    $('.geo-lat').val(lat);
+    $('.geo-lng').val(lng);
 });
 
 //ADMIN
@@ -580,4 +590,15 @@ $(document).on("click", ".user-configure", function (e) {
             alert("An unexpected error occurred... Please try again.")
         }
     });
+});
+
+$(document).on("change", "#diary-is-not-current-location", function (e) {
+    let val = $(this).is(":checked");
+    if(!val){
+        $('#diary-geo-place').prop('disabled', true).val('');
+        $('#diary-geo-lat').val('');
+        $('#diary-geo-lng').val('');
+    } else {
+        $('#diary-geo-place').prop('disabled', false).val('');
+    }
 });

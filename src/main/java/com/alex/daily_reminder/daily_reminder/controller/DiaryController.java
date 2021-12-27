@@ -42,6 +42,7 @@ public class DiaryController {
 
         DiaryRecordFilter diaryRecordFilter = new DiaryRecordFilter();
         fillData(model, diaryRecordFilter);
+        model.addAttribute("diaryEntry", new DiaryRecordEntity());
         return "diary/diary";
     }
 
@@ -51,6 +52,7 @@ public class DiaryController {
             @RequestParam String content,
             @RequestParam(required = false) Double lat,
             @RequestParam(required = false) Double lng,
+            @RequestParam(required = false) String place,
             Model model) {
 
         DiaryRecordEntity diaryRecordEntity = new DiaryRecordEntity();
@@ -58,12 +60,13 @@ public class DiaryController {
         diaryRecordEntity.setCreatedDate(new Date());
         diaryRecordEntity.setGeoLat(lat);
         diaryRecordEntity.setGeoLng(lng);
+        diaryRecordEntity.setGeoPlace(place);
         diaryRecordEntity.setUserUsername(securityUtil.getLoggedUser().getUsername());
 
         List<ValidationError> errors = diaryEntryValidator.validate(diaryRecordEntity);
         if (!CollectionUtils.isEmpty(errors)) {
             model.addAttribute("errors", errors);
-            model.addAttribute("content", content);
+            model.addAttribute("diaryEntry", diaryRecordEntity);
         } else {
             try {
                 diaryRecordService.saveDiaryEntry(diaryRecordEntity);

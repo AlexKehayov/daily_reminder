@@ -17,7 +17,7 @@
             <li id="create-diary-entry-li" th:if="${securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}">
                 <a class="uk-accordion-title" href="#" th:text="#{t.createNewEntry}"></a>
                 <div class="uk-accordion-content" id="diary-content-container">
-                    <div th:replace="~{diary/fragments/diaryContent :: diaryContent(content = null, errors = null, message = null)}"></div>
+                    <div th:replace="~{diary/fragments/diaryContent :: diaryContent(diaryEntry = ${diaryEntry}, errors = null, message = null)}"></div>
                 </div>
             </li>
         </ul>

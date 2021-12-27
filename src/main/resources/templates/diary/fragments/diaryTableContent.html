@@ -28,7 +28,7 @@
                             <a class="diary-view-content" th:data-content="${item.content}" th:data-createdDate="${item.createdDate}">
                                 <span uk-icon="icon: info"></span>
                             </a>
-                            <a class="diary-view-geo-location" th:data-lat="${item.geoLat}" th:data-lng="${item.geoLng}" th:data-createdDate="${item.createdDate}">
+                            <a th:if="${item.geoLat != null && item.geoLng != null}" class="diary-view-geo-location" th:data-lat="${item.geoLat}" th:data-lng="${item.geoLng}" th:data-createdDate="${item.createdDate}">
                                 <span uk-icon="icon: world"></span>
                             </a>
                             <a th:uk-toggle="'target: #diary-delete-' + ${item.id}" >

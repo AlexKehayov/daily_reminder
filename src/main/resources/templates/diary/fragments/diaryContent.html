@@ -1,18 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<div th:fragment="diaryContent(content, errors, message)">
+<div th:fragment="diaryContent(diaryEntry, errors, message)">
 
     <div th:if="${message != null}" class="uk-alert-danger" uk-alert>
         <p th:text="${message}"></p>
     </div>
 
     <div class="uk-margin">
-        <textarea class="uk-textarea uk-form-large" id="diary-content" th:value="${content}"></textarea>
+        <textarea class="uk-textarea uk-form-large" id="diary-content" th:value="${diaryEntry?.content}"></textarea>
     </div>
     <th:block th:each="error : ${errors}">
         <p th:if="${error.pointer.equals('content')}" style="color: red"
            th:text="${error.message}">Validation error</p>
     </th:block>
+
+    <div class="uk-grid-small" style="margin-bottom: 10px" uk-grid>
+        <div class="uk-width-1-3@s">
+            <label class="uk-form-label" for="diary-geo-place" th:text="#{l.place.not.current}"></label>
+            <input class="uk-input uk-autocomplete geo-place" id="diary-geo-place" type="text" disabled
+                   th:value="${diaryEntry?.geoPlace}">
+            <div uk-dropdown="mode: click" id="places-autocomplete">
+                <ul id="location-dropdown-wrapper" class="uk-nav uk-dropdown-nav">
+                    <div th:replace="~{organizer/fragments/locationsDropdown :: data(items = ${null})}"></div>
+                </ul>
+            </div>
+            <th:block th:each="error : ${errors}">
+                <p th:if="${error.pointer.equals('geoPlace')}" style="color: red"
+                   th:text="${error.message}">Validation error</p>
+            </th:block>
+            <input type="hidden" class="geo-lat" id="diary-geo-lat" th:value="${diaryEntry?.geoLat}">
+            <input type="hidden" class="geo-lng" id="diary-geo-lng" th:value="${diaryEntry?.geoLng}">
+        </div>
+        <div class="uk-width-1-6@s">
+            <label class="uk-switch" for="diary-is-not-current-location" style="margin: 10% 0 0 40%">
+                <input type="checkbox" id="diary-is-not-current-location" th:checked="${diaryEntry?.geoPlace != null}">
+                <div class="uk-switch-slider"></div>
+            </label>
+        </div>
+    </div>
+
     <button id="save-diary-entry" class="uk-button uk-button-primary" th:text="#{b.save}"></button>
     <input type="hidden" id="errors" th:value="${errors}">
 </div>
