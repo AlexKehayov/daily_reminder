@@ -9,7 +9,7 @@
     <div uk-alert>
         <ul uk-accordion>
             <li th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission())}">
-                <a class="uk-accordion-title" href="#" th:text="#{t.searchEntries}"></a>
+                <a class="uk-accordion-title" href="#" id="search-diary-section" th:text="#{t.searchEntries}"></a>
                 <div class="uk-accordion-content">
                     <div th:replace="~{diary/fragments/diaryTable :: data(diaryRecords = ${diaryRecords}, filter = ${filter}, total = ${total})}"></div>
                 </div>

@@ -1,4 +1,58 @@
 //COMMON
+
+function initMapCommon(){
+
+    $('#mapCommon').show();
+
+    var diaryRecords = $('#diaryRecordsJson').val();
+    let arr = JSON.parse(diaryRecords)
+
+    var map = new ol.Map({
+        target: 'mapCommon',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            })
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([arr[0].geoLng, arr[0].geoLat]),
+            zoom: 7
+        })
+    });
+
+    for( var i=0; i<arr.length; i++){
+
+        var mar = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([arr[i].geoLng, arr[i].geoLat]))
+        })
+        var iconBlue = new ol.style.Style({
+            text: new ol.style.Text({
+                text: arr[i].id.toString(),
+                scale: 1.2,
+                fill: new ol.style.Fill({
+                    color: "#fff"
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "0",
+                    width: 3
+                })
+            })
+        });
+        mar.setStyle(iconBlue);
+
+        var layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [
+                    mar
+                ]
+            })
+        });
+        map.addLayer(layer);
+    }
+
+    map.updateSize();
+}
+
 $(document).ready(function () {
     $("#diary-filter-date-from").datepicker(
         $.extend(
@@ -185,6 +239,7 @@ function searchDiary(content, dateFrom, dateTo, currentPage) {
         },
         success: function (result) {
             $('#tw-diaryRecords').html(result);
+            initMapCommon();
         },
         error: function () {
             alert("An unexpected error occurred... Please try again.")

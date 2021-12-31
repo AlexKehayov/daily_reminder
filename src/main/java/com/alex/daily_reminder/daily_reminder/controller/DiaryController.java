@@ -4,6 +4,7 @@ import com.alex.daily_reminder.daily_reminder.filter.DiaryRecordFilter;
 import com.alex.daily_reminder.daily_reminder.model.DiaryRecordEntity;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
 import com.alex.daily_reminder.daily_reminder.service.DiaryRecordService;
+import com.alex.daily_reminder.daily_reminder.util.JsonUtil;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.alex.daily_reminder.daily_reminder.validation.DiaryEntryValidator;
 import com.alex.daily_reminder.daily_reminder.validation.ValidationError;
@@ -142,6 +143,7 @@ public class DiaryController {
         List<DiaryRecordEntity> diaryRecords = diaryRecordService.selectDiaryRecords(filter);
         model.addAttribute("filter", filter);
         model.addAttribute("diaryRecords", diaryRecords);
+        model.addAttribute("diaryRecordsJson", JsonUtil.createJsonList(diaryRecords));
         model.addAttribute("total", diaryRecordService.selectDiaryRecordsCount(filter));
     }
 
