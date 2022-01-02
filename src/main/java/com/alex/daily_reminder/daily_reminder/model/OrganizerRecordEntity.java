@@ -65,8 +65,15 @@ public class OrganizerRecordEntity implements Serializable {
     @Column(name = "is_fixed_time")
     private Boolean isFixedTime;
 
+    @Column(name = "is_done")
+    private Boolean isDone;
+
+    @Column(name = "note")
+    private String note;
+
     public OrganizerRecordEntity() {
         this.setIsFixedDate(true);
         this.setIsFixedTime(true);
+        this.setIsDone(false);
     }
 }

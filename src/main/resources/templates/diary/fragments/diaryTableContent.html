@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<div th:remove="tag" th:fragment="table(diaryRecords, filter, total)">
+<div th:remove="tag" th:fragment="table(diaryRecords, filter, total)" th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}">
 
     <div th:if="${!#lists.isEmpty(diaryRecords)}" style="margin-top: 1%">
         <div>
@@ -27,16 +27,16 @@
                         <td th:text="${#dates.format(item.createdDate,'dd.MM.yyyy HH:mm:ss')}"></td>
                         <td th:text="${#strings.abbreviate(item.content, 100)}"></td>
                         <td class="options text-center">
-                            <a class="diary-view-content" th:data-content="${item.content}" th:data-createdDate="${item.createdDate}">
+                            <a class="diary-view-content" th:data-content="${item.content}" th:title="#{l.viewContent}" th:data-createdDate="${item.createdDate}">
                                 <span uk-icon="icon: info"></span>
                             </a>
-                            <a th:if="${item.geoLat != null && item.geoLng != null}" class="diary-view-geo-location" th:data-lat="${item.geoLat}" th:data-lng="${item.geoLng}" th:data-createdDate="${item.createdDate}">
-                                <span uk-icon="icon: world"></span>
+                            <a th:if="${item.geoLat != null && item.geoLng != null}" th:title="#{l.viewLocation}" class="diary-view-geo-location" th:data-lat="${item.geoLat}" th:data-lng="${item.geoLng}" th:data-createdDate="${item.createdDate}">
+                                <span uk-icon="icon: location"></span>
                             </a>
-                            <a th:uk-toggle="'target: #diary-delete-' + ${item.id}" >
+                            <a th:if="${securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}" th:uk-toggle="'target: #diary-delete-' + ${item.id}" >
                                 <span uk-icon="icon: trash"></span>
                             </a>
-                            <div th:id="'diary-delete-' + ${item.id}" uk-modal>
+                            <div th:id="'diary-delete-' + ${item.id}" th:title="#{l.deleteEntry}" uk-modal>
                                 <div class="uk-modal-dialog uk-modal-body">
                                     <h2 class="uk-modal-title" th:text="' ' + #{p.confirmDeletion}"></h2>
                                     <button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{b.no}"></button>

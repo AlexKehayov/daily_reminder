@@ -112,4 +112,15 @@ public class OrganizerRecordRepositoryCustom {
         return query.getResultList();
     }
 
+    public List<OrganizerRecordEntity> selectUpcomingTasks(Integer days) {
+        Query query = em.createNativeQuery("select * from organizer_record x where ((x.fixed_date >= CURRENT_DATE() AND x.fixed_date <= :endDate) OR (x.from_date >= CURRENT_DATE() AND x.from_date <= :endDate)) AND x.is_done = false", OrganizerRecordEntity.class);
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, days);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = dateFormat.format(c.getTime());
+        query.setParameter("endDate", strDate);
+        return query.getResultList();
+    }
+
 }

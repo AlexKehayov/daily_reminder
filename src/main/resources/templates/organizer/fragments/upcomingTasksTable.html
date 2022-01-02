@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:remove="tag" th:fragment="table(upcomingTasks)" th:with="securityUtil=${T(com.alex.daily_reminder.daily_reminder.util.SecurityUtil)}, securityPermission=${T(com.alex.daily_reminder.daily_reminder.security.config.SecurityPermission)}">
+
+    <div th:if="${!#lists.isEmpty(upcomingTasks)}" style="margin-top: 1%">
+        <div>
+            <div>
+                <table class="uk-table uk-table-striped uk-table-small">
+                    <thead>
+                    <tr>
+                        <th style="width: 20%" th:text="#{l.date}"></th>
+                        <th th:text="#{l.title}"></th>
+                        <th style="width: 10%" th:text="#{l.options}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item,itemStat : ${upcomingTasks}">
+                        <td th:text="${item.fixedDate != null ? #dates.format(item.fixedDate,'dd.MM.yyyy') : (#dates.format(item.fromDate,'dd.MM.yyyy') + ' - ' + #dates.format(item.toDate,'dd.MM.yyyy'))}"></td>
+                        <td th:text="${#strings.abbreviate(item.title, 100)}"></td>
+                        <td class="options text-center">
+                            <a class="organizer-view-content" th:title="#{l.viewContent}" th:data-id="${item.id}">
+                                <span uk-icon="icon: info"></span>
+                            </a>
+                            <a th:if="${item.geoLat != null && item.geoLng != null}" th:title="#{l.viewLocation}" class="organizer-view-geo-location" th:data-id="${item.id}">
+                                <span uk-icon="icon: location"></span>
+                            </a>
+                            <a th:if="${securityUtil.hasRole(securityPermission.USER_WRITE_ORGANIZER.getPermission())}" class="organizer-edit-note" th:title="#{l.editNote}" th:data-id="${item.id}">
+                                <span uk-icon="icon: comment"></span>
+                            </a>
+                            <a th:if="${!item.isDone && securityUtil.hasRole(securityPermission.USER_WRITE_ORGANIZER.getPermission())}" class="organizer-mark-done" th:title="#{l.markAsDone}" th:data-id="${item.id}">
+                                <span uk-icon="icon: check"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -156,6 +156,43 @@ public class OrganizerController {
         return "organizer/fragments/organizerTableContent :: table";
     }
 
+    @PostMapping("/updateUpcomingTasks")
+    @PreAuthorize("hasAuthority('user:read_organizer')")
+    public String updateUpcomingTasks(Model model) {
+        List<OrganizerRecordEntity> upcomingTasks = organizerRecordService.selectUpcomingTasks(5);
+        model.addAttribute("upcomingTasks", upcomingTasks);
+        return "organizer/fragments/upcomingTasksTable :: table";
+    }
+
+    @PostMapping("/markDone")
+    @ResponseBody
+    @PreAuthorize("hasAuthority('user:write_organizer')")
+    public void markDone(@RequestParam Integer id,
+                         @RequestParam Boolean isDone) {
+        OrganizerRecordEntity organizerRecordEntity = organizerRecordService.selectOrganizerRecordById(id);
+        organizerRecordEntity.setIsDone(isDone);
+        organizerRecordService.saveOrganizerEntry(organizerRecordEntity);
+    }
+
+    @PostMapping("/initEditNoteModal")
+    @PreAuthorize("hasAuthority('user:write_organizer')")
+    public String initEditNoteModal(
+            @RequestParam Integer id,
+            Model model) {
+        model.addAttribute("organizerEntry", organizerRecordService.selectOrganizerRecordById(id));
+        return "organizer/modals/editNote :: edit-note";
+    }
+
+    @PostMapping("/updateNote")
+    @ResponseBody
+    @PreAuthorize("hasAuthority('user:write_organizer')")
+    public void updateNote(@RequestParam Integer id,
+                           @RequestParam String note) {
+        OrganizerRecordEntity organizerRecordEntity = organizerRecordService.selectOrganizerRecordById(id);
+        organizerRecordEntity.setNote(note);
+        organizerRecordService.saveOrganizerEntry(organizerRecordEntity);
+    }
+
     @PostMapping("/initContentModal")
     @PreAuthorize("hasAuthority('user:read_organizer')")
     public String initContentModal(
@@ -183,8 +220,10 @@ public class OrganizerController {
 
     private void fillData(Model model, OrganizerRecordFilter filter) {
         List<OrganizerRecordEntity> organizerRecords = organizerRecordService.selectOrganizerRecords(filter);
+        List<OrganizerRecordEntity> upcomingTasks = organizerRecordService.selectUpcomingTasks(5);
         model.addAttribute("filter", filter);
         model.addAttribute("organizerRecords", organizerRecords);
+        model.addAttribute("upcomingTasks", upcomingTasks);
         model.addAttribute("total", organizerRecordService.selectOrganizerRecordsCount(filter));
     }
 
@@ -193,7 +232,7 @@ public class OrganizerController {
         List<OrganizerRecordEntity> organizerRecordEntities = organizerRecordService.selectOrganizerRecordsForTomorrow();
         String subject = "A quick reminder from Daily Reminder :)";
         String text;
-        for(OrganizerRecordEntity ore : organizerRecordEntities){
+        for (OrganizerRecordEntity ore : organizerRecordEntities) {
             text = "You have the following task for tomorrow:\nTitle: " + ore.getTitle() + "\n" + "Content: " + ore.getContent() + "\n" + "Time: " + (ore.getIsFixedTime() ? ore.getFixedTime() : (ore.getFromTime() + " - " + ore.getToTime())) + "\nPlace: " + ore.getGeoPlace();
             UserEntity user = userService.findUserByUsername(ore.getUserUsername());
             emailUtil.sendEmail(subject, text, user.getEmail());

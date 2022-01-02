@@ -335,6 +335,7 @@ function saveOrganizerEntry() {
                 UIkit.accordion(UIkit.util.$('ul[uk-accordion]')).toggle();
             }
             searchOrganizer(null, null, null, null, "1");
+            updateUpcomingTasks()
         },
         error: function () {
             alert("An unexpected error occurred... Please try again.")
@@ -354,6 +355,7 @@ $(document).on("click", ".delete-organizer-entry", function (e) {
         },
         success: function () {
             searchOrganizer(null, null, null, null, "1");
+            updateUpcomingTasks();
         },
         error: function () {
             alert("An unexpected error occurred... Please try again.")
@@ -424,6 +426,22 @@ function searchOrganizer(title, content, fromDate, toDate, currentPage) {
     });
 }
 
+function updateUpcomingTasks() {
+    $.ajax({
+        url: '/dailyReminder/organizer/updateUpcomingTasks',
+        type: "post",
+        data: {
+
+        },
+        success: function (result) {
+            $('#upcoming-tasks-container').html(result);
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+}
+
 $(document).on("click", ".organizer-view-content", function (e) {
     let id = $(this).attr('data-id');
 
@@ -455,6 +473,83 @@ $(document).on("click", ".organizer-view-geo-location", function (e) {
         success: function (result) {
             $('#modal-location').html(result);
             $('#modal-location').addClass('uk-open').show();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("click", ".organizer-mark-done", function (e) {
+    let id = $(this).attr('data-id');
+    organizerMarkDone(id, true);
+});
+
+$(document).on("click", ".organizer-unmark-done", function (e) {
+    let id = $(this).attr('data-id');
+    organizerMarkDone(id, false);
+});
+
+function organizerMarkDone(id, isDone){
+    $.ajax({
+        url: '/dailyReminder/organizer/markDone',
+        type: "post",
+        data: {
+            id: id,
+            isDone: isDone
+        },
+        success: function () {
+            updateUpcomingTasks();
+            let title = $('#organizer-filter-title').val();
+            let content = $('#organizer-filter-content').val();
+            let fromDate = $('#organizer-filter-from-date').val();
+            let toDate = $('#organizer-filter-to-date').val();
+            let currentPage = parseInt($('#currentPage').val());
+            searchOrganizer(title, content, fromDate, toDate, currentPage);
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+}
+
+$(document).on("click", ".organizer-edit-note", function (e) {
+    let id = $(this).attr('data-id');
+
+    $.ajax({
+        url: '/dailyReminder/organizer/initEditNoteModal',
+        type: "post",
+        data: {
+            id: id
+        },
+        success: function (result) {
+            $('#modal-note').html(result);
+            $('#modal-note').addClass('uk-open').show();
+        },
+        error: function () {
+            alert("An unexpected error occurred... Please try again.")
+        }
+    });
+});
+
+$(document).on("click", ".save-organizer-entry-note", function (e) {
+    let id = $(this).attr('data-id');
+    let note = $('#organizer-note').val();
+    $.ajax({
+        url: '/dailyReminder/organizer/updateNote',
+        type: "post",
+        data: {
+            id: id,
+            note: note
+        },
+        success: function () {
+            updateUpcomingTasks();
+            let title = $('#organizer-filter-title').val();
+            let content = $('#organizer-filter-content').val();
+            let fromDate = $('#organizer-filter-from-date').val();
+            let toDate = $('#organizer-filter-to-date').val();
+            let currentPage = parseInt($('#currentPage').val());
+            searchOrganizer(title, content, fromDate, toDate, currentPage);
         },
         error: function () {
             alert("An unexpected error occurred... Please try again.")

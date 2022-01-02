@@ -19,4 +19,6 @@ public interface OrganizerRecordService {
 
     List<OrganizerRecordEntity> selectOrganizerRecordsForTomorrow();
 
+    List<OrganizerRecordEntity> selectUpcomingTasks(Integer days);
+
 }

@@ -49,4 +49,9 @@ public class OrganizerRecordServiceImpl implements OrganizerRecordService {
     public List<OrganizerRecordEntity> selectOrganizerRecordsForTomorrow() {
         return organizerRecordRepositoryCustom.selectOrganizerrecordsForTomorrow();
     }
+
+    @Override
+    public List<OrganizerRecordEntity> selectUpcomingTasks(Integer days) {
+        return organizerRecordRepositoryCustom.selectUpcomingTasks(5);
+    }
 }

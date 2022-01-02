@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="uk-modal-dialog uk-modal-body" style="width: 80%; height: auto"
+     th:fragment="edit-note(organizerEntry)">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <h2 class="uk-modal-title" th:text="' ' + #{l.editNote}"></h2>
+    <textarea id="organizer-note" class="uk-textarea" th:text="${organizerEntry?.note}" style="margin-bottom: 10px"></textarea>
+    <button class="save-organizer-entry-note uk-button uk-button-primary uk-modal-close" th:data-id="${organizerEntry.id}" type="button" th:text="#{b.save}" style="float: right"></button>
+</div>
+</html>
