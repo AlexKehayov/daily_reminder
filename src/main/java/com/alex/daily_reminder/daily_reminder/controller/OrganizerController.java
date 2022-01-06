@@ -126,7 +126,7 @@ public class OrganizerController {
 
     @PostMapping("/searchOrganizer")
     @PreAuthorize("hasAuthority('user:read_organizer')")
-    public String searchDiary(
+    public String searchOrganizer(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String content,
             @RequestParam(required = false) String fromDate,
