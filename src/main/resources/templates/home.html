@@ -7,7 +7,9 @@
     <nav th:replace="~{fragments/navbar :: nav(locale = ${#locale.toString()})}"></nav>
 
     <div style="margin-top: 30%" class="uk-child-width-1-2 uk-grid-match" uk-grid>
-        <div class="uk-animation-toggle" tabindex="0" th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission()) || securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}">
+        <div class="uk-animation-toggle" tabindex="0"
+             th:if="${securityUtil.hasRole(securityPermission.USER_READ_DIARY.getPermission()) ||
+             securityUtil.hasRole(securityPermission.USER_WRITE_DIARY.getPermission())}">
             <div class="uk-card uk-card-default uk-card-body uk-animation-slide-bottom">
                 <p class="uk-text-center"><a href="/dailyReminder/diary" th:text="#{l.diary}"></a></p>
             </div>

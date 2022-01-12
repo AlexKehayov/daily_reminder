@@ -94,7 +94,7 @@ public class AdminController {
 
     @PostMapping("/deleteEntry")
     @ResponseBody
-    public void deleteDiaryEntry(
+    public void deleteEntry(
             @RequestParam String username) {
         applicationUserService.deleteUser(username);
     }
@@ -131,7 +131,7 @@ public class AdminController {
     }
 
     @PostMapping("/initConfigureModal")
-    public String initContentModal(
+    public String initConfigureModal(
             @RequestParam String username,
             Model model) {
         model.addAttribute("user", applicationUserService.findUserByUsername(username));

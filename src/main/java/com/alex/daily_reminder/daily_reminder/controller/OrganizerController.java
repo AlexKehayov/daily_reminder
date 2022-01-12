@@ -4,15 +4,12 @@ import com.alex.daily_reminder.daily_reminder.filter.OrganizerRecordFilter;
 import com.alex.daily_reminder.daily_reminder.model.OrganizerRecordEntity;
 import com.alex.daily_reminder.daily_reminder.model.PlaceEntity;
 import com.alex.daily_reminder.daily_reminder.security.model.UserEntity;
-import com.alex.daily_reminder.daily_reminder.security.service.ApplicationUserService;
 import com.alex.daily_reminder.daily_reminder.service.OrganizerRecordService;
 import com.alex.daily_reminder.daily_reminder.service.PlacesService;
-import com.alex.daily_reminder.daily_reminder.util.EmailUtil;
 import com.alex.daily_reminder.daily_reminder.util.SecurityUtil;
 import com.alex.daily_reminder.daily_reminder.validation.OrganizerEntryValidator;
 import com.alex.daily_reminder.daily_reminder.validation.ValidationError;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,11 +31,10 @@ import java.util.Objects;
 public class OrganizerController {
 
     private final SecurityUtil securityUtil;
-    private final EmailUtil emailUtil;
     private final OrganizerEntryValidator organizerEntryValidator;
     private final OrganizerRecordService organizerRecordService;
     private final PlacesService placesService;
-    private final ApplicationUserService userService;
+
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('user:read_organizer', 'user:write_organizer')")
@@ -225,18 +221,6 @@ public class OrganizerController {
         model.addAttribute("organizerRecords", organizerRecords);
         model.addAttribute("upcomingTasks", upcomingTasks);
         model.addAttribute("total", organizerRecordService.selectOrganizerRecordsCount(filter));
-    }
-
-    @Scheduled(cron = "0 0 12 * * *") //every day at 12:00 s/m/h/...      for every minute cron = "* */1 * * * *"
-    public void sendReminders() {
-        List<OrganizerRecordEntity> organizerRecordEntities = organizerRecordService.selectOrganizerRecordsForTomorrow();
-        String subject = "A quick reminder from Daily Reminder :)";
-        String text;
-        for (OrganizerRecordEntity ore : organizerRecordEntities) {
-            text = "You have the following task for tomorrow:\nTitle: " + ore.getTitle() + "\n" + "Content: " + ore.getContent() + "\n" + "Time: " + (ore.getIsFixedTime() ? ore.getFixedTime() : (ore.getFromTime() + " - " + ore.getToTime())) + "\nPlace: " + ore.getGeoPlace();
-            UserEntity user = userService.findUserByUsername(ore.getUserUsername());
-            emailUtil.sendEmail(subject, text, user.getEmail());
-        }
     }
 
 }

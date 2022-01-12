@@ -142,14 +142,16 @@ public class TemplateController {
         if (StringUtils.hasText(recoveryEmail)){
             UserEntity user = applicationUserService.findUserByEmail(recoveryEmail);
 
-            Random r = new Random( System.currentTimeMillis() );
-            int newIntPass = 10000 + r.nextInt(20000);
-            String generatedPassword = Integer.toString(newIntPass);
+            if (Objects.nonNull(user)){
+                Random r = new Random( System.currentTimeMillis() );
+                int newIntPass = 10000 + r.nextInt(20000);
+                String generatedPassword = Integer.toString(newIntPass);
 
-            user.setPassword(passwordEncoder.encode(generatedPassword));
-            applicationUserService.saveUserEntity(user);
+                user.setPassword(passwordEncoder.encode(generatedPassword));
+                applicationUserService.saveUserEntity(user);
 
-            emailUtil.sendEmail("New password for DailyReminder", "Your new password: " + generatedPassword + ". Change it when you log in.", user.getEmail());
+                emailUtil.sendEmail("New password for DailyReminder", "Your new password: " + generatedPassword + ". Change it when you log in.", user.getEmail());
+            }
         }
 
         return "redirect:/login";
