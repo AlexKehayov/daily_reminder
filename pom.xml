@@ -11,7 +11,7 @@
 	<groupId>com.alex.daily_reminder</groupId>
 	<artifactId>daily_reminder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>daily_reminder</name>
 	<description>Spring Boot Organizer and Diary Project</description>
 	<properties>
